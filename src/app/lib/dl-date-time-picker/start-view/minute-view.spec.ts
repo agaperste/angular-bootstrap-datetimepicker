@@ -89,6 +89,23 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentMoment.format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());
     });
+
+    it('should contain 1 .active element for the current minute', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.active'));
+      expect(currentElements.length).toBe(1);
+
+      const now = moment.utc();
+      const startDate = moment.utc(now).startOf('hour');
+
+      const step = 5;
+
+      const minuteSteps = new Array(60 / step).fill(0).map((value, index) => index * step);
+      const minuteValues = minuteSteps.map((minutesToAdd) => moment.utc(startDate).add(minutesToAdd, 'minutes').valueOf());
+      const currentMoment = moment.utc(minuteValues.filter((value) => value < now.valueOf()).pop());
+
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentMoment.format('LT'));
+      expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());
+    });
   });
 
   describe('ngModel=2018-01-26T15:53:27Z', () => {

@@ -88,6 +88,13 @@ describe('DlDateTimePickerComponent startView=day', () => {
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('D'));
       expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('day').valueOf().toString());
     });
+
+    it('should contain 1 .active element for the current day', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.active'));
+      expect(currentElements.length).toBe(1);
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('D'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('day').valueOf().toString());
+    });
   });
 
   describe('undefined start view', () => {

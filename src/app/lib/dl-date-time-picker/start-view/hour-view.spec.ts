@@ -73,8 +73,15 @@ describe('DlDateTimePickerComponent startView=hour', () => {
       expect( hourElements.length).toBe(24);
     });
 
-    it('should contain 1 .today element for the current  hour', () => {
+    it('should contain 1 .today element for the current hour', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
+      expect(currentElements.length).toBe(1);
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().startOf('hour').format('LT'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('hour').valueOf().toString());
+    });
+
+    it('should contain 1 .active element for the current hour', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().startOf('hour').format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('hour').valueOf().toString());

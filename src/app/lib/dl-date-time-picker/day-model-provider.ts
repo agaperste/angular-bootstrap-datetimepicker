@@ -27,7 +27,7 @@ export class DayModelProvider implements ModelProvider {
     const result: DlDateTimePickerModel = {
       view: 'day',
       viewLabel: startOfMonth.format('MMM YYYY'),
-      activeDate: milliseconds,
+      activeDate: moment.utc(milliseconds).startOf('day').valueOf(),
       leftButton: {
         value: previousMonth.valueOf(),
         ariaLabel: `Go to ${previousMonth.format('MMM YYYY')}`,

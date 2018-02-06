@@ -77,6 +77,13 @@ describe('DlDateTimePickerComponent startView=month', () => {
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('MMM'));
       expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('month').valueOf().toString());
     });
+
+    it('should contain 1 .active element for the current month', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.active'));
+      expect(currentElements.length).toBe(1);
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('MMM'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('month').valueOf().toString());
+    });
   });
 
   describe('ngModel=2017-12-22', () => {

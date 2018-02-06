@@ -11,9 +11,17 @@ import * as moment from 'moment';
 
 @Component({
 
+  template: '<dl-date-time-picker startView="year"></dl-date-time-picker>'
+})
+class YearStartViewComponent {
+  @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
+}
+
+@Component({
+
   template: '<dl-date-time-picker startView="year" [(ngModel)]="selectedDate"></dl-date-time-picker>'
 })
-class StartViewYearComponent {
+class YearStartViewWithNgModelComponent {
   selectedDate = 1514160000000; // 2017-12-22
   @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
 }
@@ -32,20 +40,21 @@ describe('DlDateTimePickerComponent', () => {
       imports: [FormsModule],
       declarations: [
         DlDateTimePickerComponent,
-        StartViewYearComponent,
+        YearStartViewComponent,
+        YearStartViewWithNgModelComponent,
         YearSelectorComponent]
     })
       .compileComponents();
   }));
 
-  describe('startView=year', () => {
-    let component: StartViewYearComponent;
-    let fixture: ComponentFixture<StartViewYearComponent>;
+  describe('default behavior ', () => {
+    let component: YearStartViewComponent;
+    let fixture: ComponentFixture<YearStartViewComponent>;
     let debugElement: DebugElement;
     let nativeElement: any;
 
     beforeEach(async(() => {
-      fixture = TestBed.createComponent(StartViewYearComponent);
+      fixture = TestBed.createComponent(YearStartViewComponent);
       fixture.detectChanges();
       fixture.whenStable().then(() => {
         fixture.detectChanges();
@@ -56,13 +65,8 @@ describe('DlDateTimePickerComponent', () => {
     }));
 
     it('should start with year-view', () => {
-      const yearView = fixture.debugElement.query(By.css('.year-view'));
-      expect(yearView).toBeTruthy();
-    });
-
-    it('should contain .view-label element with "2010-2019"', () => {
-      const viewLabel = fixture.debugElement.query(By.css('.view-label'));
-      expect(viewLabel.nativeElement.textContent).toBe('2010-2019');
+      const monthView = fixture.debugElement.query(By.css('.year-view'));
+      expect(monthView).toBeTruthy();
     });
 
     it('should contain 0 .col-label elements', () => {
@@ -71,17 +75,45 @@ describe('DlDateTimePickerComponent', () => {
     });
 
     it('should contain 10 .year elements', () => {
-      const yearElements = fixture.debugElement.queryAll(By.css('.year'));
-      expect(yearElements.length).toBe(10);
+      const monthElements = fixture.debugElement.queryAll(By.css('.year'));
+      expect(monthElements.length).toBe(10);
     });
 
     it('should contain 1 .today element for the current year', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
       expect(currentElements.length).toBe(1);
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().year().toString());
+      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('year').valueOf().toString());
+    });
 
-      const currentYear = moment.utc().startOf('year');
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentYear.year().toString());
-      expect(currentElements[0].nativeElement.classList).toContain(currentYear.valueOf().toString());
+    it('should contain 1 .active element for the current year', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.active'));
+      expect(currentElements.length).toBe(1);
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().year().toString());
+      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('year').valueOf().toString());
+    });
+  });
+
+  describe('ngModel=2017-12-22', () => {
+    let component: YearStartViewWithNgModelComponent;
+    let fixture: ComponentFixture<YearStartViewWithNgModelComponent>;
+    let debugElement: DebugElement;
+    let nativeElement: any;
+
+    beforeEach(async(() => {
+      fixture = TestBed.createComponent(YearStartViewWithNgModelComponent);
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        component = fixture.componentInstance;
+        debugElement = fixture.debugElement;
+        nativeElement = debugElement.nativeElement;
+      });
+    }));
+
+    it('should contain .view-label element with "2010-2019"', () => {
+      const viewLabel = fixture.debugElement.query(By.css('.view-label'));
+      expect(viewLabel.nativeElement.textContent).toBe('2010-2019');
     });
 
     it('should contain 10 .year elements with start of year utc time as class and role of gridcell', () => {
