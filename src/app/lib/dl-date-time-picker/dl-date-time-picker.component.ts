@@ -3,11 +3,12 @@ import * as moment from 'moment';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
-import {YearModelFactory} from './year-model-factory';
-import {MonthModelFactory} from './month-model-factory';
-import {DayModelFactory} from './day-model-factory';
-import {HourModelFactory} from './hour-model-factory';
-import {MinuteModelFactory} from './minute-model-factory';
+import {ModelProvider} from './model-provider';
+import {YearModelProvider} from './year-model-provider';
+import {MonthModelProvider} from './month-model-provider';
+import {DayModelProvider} from './day-model-provider';
+import {HourModelProvider} from './hour-model-provider';
+import {MinuteModelProvider} from './minute-model-provider';
 
 const ENTER = 13;
 const SPACE = 32;
@@ -36,7 +37,12 @@ class DlDateTimePickerChange {
       provide: NG_VALUE_ACCESSOR,
       useExisting: DlDateTimePickerComponent,
       multi: true
-    }
+    },
+    YearModelProvider,
+    MonthModelProvider,
+    DayModelProvider,
+    HourModelProvider,
+    MinuteModelProvider
   ],
   selector: 'dl-date-time-picker',
   styleUrls: ['./dl-date-time-picker.component.css'],
@@ -80,12 +86,12 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   private _touched: (() => void)[] = [];
   private _value: number;
 
-  private _viewToFactory = {
-    year: new YearModelFactory(),
-    month: new MonthModelFactory(),
-    day: new DayModelFactory(),
-    hour: new HourModelFactory(),
-    minute: new MinuteModelFactory(),
+  private _viewToFactory: {
+    year: ModelProvider;
+    month: ModelProvider;
+    day: ModelProvider;
+    hour: ModelProvider;
+    minute: ModelProvider;
   };
 
   private _nextView = {
@@ -103,8 +109,20 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   };
 
   constructor(private _elementRef: ElementRef,
-              private _ngZone: NgZone) {
+              private _ngZone: NgZone,
+              private yearModelProvider: YearModelProvider,
+              private monthModelProvider: MonthModelProvider,
+              private dayModelProvider: DayModelProvider,
+              private hourModelProvider: HourModelProvider,
+              private minuteModelProvider: MinuteModelProvider) {
 
+    this._viewToFactory = {
+      year: yearModelProvider,
+      month: monthModelProvider,
+      day: dayModelProvider,
+      hour: hourModelProvider,
+      minute: minuteModelProvider,
+    };
   }
 
   ngOnInit(): void {

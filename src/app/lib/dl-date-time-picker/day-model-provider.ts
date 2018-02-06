@@ -1,8 +1,17 @@
-import {ModelFactory} from './model-factory';
+import {ModelProvider} from './model-provider';
 import * as moment from 'moment';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
+import {NgModule} from '@angular/core';
 
-export class DayModelFactory implements ModelFactory {
+@NgModule({
+  providers: [
+    {
+      provide: DayModelProvider,
+      useClass: DayModelProvider,
+    },
+  ],
+})
+export class DayModelProvider implements ModelProvider {
   getModel(milliseconds: number): DlDateTimePickerModel {
 
     const startOfMonth = moment.utc(milliseconds).startOf('month');
