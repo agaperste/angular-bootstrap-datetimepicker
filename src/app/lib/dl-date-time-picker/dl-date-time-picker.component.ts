@@ -71,7 +71,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /** Emits when a `change` event is fired on this date/time picker. */
   @Output()
-  change = new EventEmitter<DlDateTimePickerChange>();
+  readonly change = new EventEmitter<DlDateTimePickerChange>();
 
   // @Input()
   leftIconClasses = {
@@ -135,10 +135,10 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
-    this._model = this._viewToFactory[this.getStartView()].getModel(moment.utc().valueOf());
+    this._model = this._viewToFactory[this._getStartView()].getModel(moment.utc().valueOf());
   }
 
-  private getStartView(): string {
+  private _getStartView(): string {
     const startIndex = Math.max(this.VIEWS.indexOf(this.minView || 'minute'), this.VIEWS.indexOf(this.startView || 'day'));
     return this.VIEWS[startIndex];
   }

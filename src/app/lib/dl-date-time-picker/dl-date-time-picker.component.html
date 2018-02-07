@@ -9,7 +9,7 @@
       <span [ngClass]="leftIconClasses"></span>
     </button>
 
-    <div *ngIf="_model.view === 'year'; then yearViewLabel else defaultViewLabel;"></div>
+    <div *ngIf="_model.view === (this.maxView || 'year'); then maxViewLabel else defaultViewLabel;"></div>
 
     <button class="col right-button"
             type="button"
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<ng-template #yearViewLabel>
+<ng-template #maxViewLabel>
   <div class="col view-label">{{_model.viewLabel}}</div>
 </ng-template>
 <ng-template #defaultViewLabel>
