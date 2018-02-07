@@ -10,18 +10,25 @@ import {DayModelProvider} from './day-model-provider';
 import {HourModelProvider} from './hour-model-provider';
 import {MinuteModelProvider} from './minute-model-provider';
 
-const ENTER = 13;
-const SPACE = 32;
-const PAGE_UP = 33;
-const PAGE_DOWN = 34;
-const END = 35;
-const HOME = 36;
-const UP_ARROW = 38;
 const DOWN_ARROW = 40;
-const RIGHT_ARROW = 39;
+const END = 35;
+const ENTER = 13;
+const HOME = 36;
 const LEFT_ARROW = 37;
+const PAGE_DOWN = 34;
+const PAGE_UP = 33;
+const RIGHT_ARROW = 39;
+const SPACE = 32;
+const UP_ARROW = 38;
+const VIEWS = [
+  'minute',
+  'hour',
+  'day',
+  'month',
+  'year'
+];
 
-class DlDateTimePickerChange {
+export class DlDateTimePickerChange {
   utc: number;
 
   constructor(milliseconds: number) {
@@ -50,15 +57,6 @@ class DlDateTimePickerChange {
 })
 export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
-
-  private readonly VIEWS = [
-    'minute',
-    'hour',
-    'day',
-    'month',
-    'year'
-  ];
-
   @Input()
   maxView: 'year' | 'month' | 'day' | 'hour' | 'minute';
 
@@ -68,27 +66,29 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   @Input()
   minView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'minute';
 
+  @Input()
+  leftIconClass: string | string[] | Set<string> | {} = [
+    'oi',
+    'oi-chevron-left'
+  ];
+
+  @Input()
+  upIconClass = [
+    'oi',
+    'oi-chevron-top'
+  ];
+
+  @Input()
+  rightIconClass = [
+    'oi',
+    'oi-chevron-right'
+  ];
+
 
   /** Emits when a `change` event is fired on this date/time picker. */
   @Output()
   readonly change = new EventEmitter<DlDateTimePickerChange>();
 
-  // @Input()
-  leftIconClasses = {
-    'oi': true,
-    'oi-chevron-left': true
-  };
-
-  upIconClasses = {
-    'oi': true,
-    'oi-chevron-top': true
-  };
-
-  // @Input()
-  rightIconClasses = {
-    'oi': true,
-    'oi-chevron-right': true
-  };
 
   private _changed: ((value: number) => void)[] = [];
   private _model: DlDateTimePickerModel;
@@ -139,8 +139,8 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   private _getStartView(): string {
-    const startIndex = Math.max(this.VIEWS.indexOf(this.minView || 'minute'), this.VIEWS.indexOf(this.startView || 'day'));
-    return this.VIEWS[startIndex];
+    const startIndex = Math.max(VIEWS.indexOf(this.minView || 'minute'), VIEWS.indexOf(this.startView || 'day'));
+    return VIEWS[startIndex];
   }
 
   _onDateClick(milliseconds: number) {
