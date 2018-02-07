@@ -50,6 +50,15 @@ class DlDateTimePickerChange {
 })
 export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
+
+  private readonly VIEWS = [
+    'minute',
+    'hour',
+    'day',
+    'month',
+    'year'
+  ];
+
   @Input()
   maxView: 'year' | 'month' | 'day' | 'hour' | 'minute';
 
@@ -126,14 +135,19 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
-    this._model = this._viewToFactory[this.startView || 'day'].getModel(moment.utc().valueOf());
+    this._model = this._viewToFactory[this.getStartView()].getModel(moment.utc().valueOf());
+  }
+
+  private getStartView(): string {
+    const startIndex = Math.max(this.VIEWS.indexOf(this.minView || 'minute'), this.VIEWS.indexOf(this.startView || 'day'));
+    return this.VIEWS[startIndex];
   }
 
   _onDateClick(milliseconds: number) {
 
     let nextView = this._nextView[this._model.view];
 
-    if (this.minView === this._model.view) {
+    if ((this.minView || 'minute') === this._model.view) {
       this.value = milliseconds;
       nextView = this.startView;
     }
