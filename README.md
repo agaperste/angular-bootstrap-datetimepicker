@@ -154,7 +154,7 @@ optional:
 
 ## Contributing
 
-See [Contributing.md](/.github/contributing.md)
+See [Contributing.md](.github/contributing.md)
 
 ### Testing
 This directive was written using TDD and all enhancements and changes have related tests.
@@ -197,7 +197,7 @@ angular-bootstrap-datetimepicker is released under the MIT license and is copyri
 * Include the source of angular-bootstrap-datetimepicker itself, or of any modifications you may have made to it, in any redistribution you may assemble that includes it
 * Submit changes that you make to angular-bootstrap-datetimepicker back to the angular-bootstrap-datetimepicker project (though such feedback is encouraged)
 
-The full angular-bootstrap-datetimepicker license is located [in the project repository](/LICENSE) for more information.
+The full angular-bootstrap-datetimepicker license is located [in the project repository](LICENSE) for more information.
 
 
 ## Donating
