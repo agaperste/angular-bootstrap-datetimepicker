@@ -4,10 +4,20 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {
-  dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
+  dispatchKeyboardEvent,
+  DOWN_ARROW,
+  END,
+  ENTER,
+  HOME,
+  LEFT_ARROW,
+  PAGE_DOWN,
+  PAGE_UP,
+  RIGHT_ARROW,
+  SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
 import * as moment from 'moment';
+import {DEC, JAN} from '../../../../testing/month-constants';
 
 @Component({
 
@@ -22,7 +32,7 @@ class YearStartViewComponent {
   template: '<dl-date-time-picker startView="year" [(ngModel)]="selectedDate"></dl-date-time-picker>'
 })
 class YearStartViewWithNgModelComponent {
-  selectedDate = 1514160000000; // 2017-12-22
+  selectedDate = new Date(2017, DEC, 22).getTime();
   @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
 }
 
@@ -82,15 +92,15 @@ describe('DlDateTimePickerComponent', () => {
     it('should contain 1 .today element for the current year', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().year().toString());
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('year').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().year().toString());
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('year').valueOf().toString());
     });
 
     it('should contain 1 .active element for the current year', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().year().toString());
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('year').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().year().toString());
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('year').valueOf().toString());
     });
   });
 
@@ -117,24 +127,18 @@ describe('DlDateTimePickerComponent', () => {
     });
 
     it('should contain 10 .year elements with start of year utc time as class and role of gridcell', () => {
-      const expectedClass = [
-        1262304000000,
-        1293840000000,
-        1325376000000,
-        1356998400000,
-        1388534400000,
-        1420070400000,
-        1451606400000,
-        1483228800000,
-        1514764800000,
-        1546300800000
-      ];
+      // Truncate the last digit from the current year to get the start of the decade
+      const startDecade = (Math.trunc(moment().year() / 10) * 10);
+
+      const expectedClass = new Array(10)
+        .fill(0)
+        .map((value, index) => new Date(startDecade + index, JAN, 1).getTime().toString());
 
       const yearElements = fixture.debugElement.queryAll(By.css('.year'));
 
       yearElements.forEach((yearElement, index) => {
         const key = expectedClass[index];
-        expect(yearElement.nativeElement.classList).toContain(key.toString(10));
+        expect(yearElement.nativeElement.classList).toContain(key);
         expect(yearElement.attributes['role']).toBe('gridcell', index);
         expect(yearElement.attributes['aria-label']).toBeNull(); // why isn't this undefined?
       });
@@ -142,7 +146,8 @@ describe('DlDateTimePickerComponent', () => {
 
     it('should have a class for previous decade value on .left-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.left-button'));
-      expect(leftButton.nativeElement.classList).toContain('978307200000');
+      const expected = new Date(2000, JAN, 1).getTime();
+      expect(leftButton.nativeElement.classList).toContain(expected.toString());
     });
 
     it('should switch to previous decade value after clicking .left-button', () => {
@@ -157,9 +162,10 @@ describe('DlDateTimePickerComponent', () => {
       expect(yearElements[0].nativeElement.textContent.trim()).toBe('2000');
     });
 
-    it('should has a class for previous decade on .right-button ', () => {
+    it('should has a class for next decade on .right-button ', () => {
       const rightButton = fixture.debugElement.query(By.css('.right-button')).nativeElement;
-      expect(rightButton.classList).toContain('1609459200000');
+      const expected = new Date(2020, JAN, 1).getTime();
+      expect(rightButton.classList).toContain(expected.toString());
     });
 
     it('should switch to next decade after clicking .right-button', () => {
@@ -239,7 +245,7 @@ describe('DlDateTimePickerComponent', () => {
     });
 
     it('should change to .month-view when hitting SPACE', () => {
-      (component.picker as any)._model.activeDate = new Date('2011-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2011, JAN, 1).getTime();
       fixture.detectChanges();
 
       const activeElement = fixture.debugElement.query(By.css('.active'));
@@ -275,7 +281,7 @@ describe('DlDateTimePickerComponent', () => {
     });
 
     it('should change to next decade when last .year is .active element and pressing on right arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2019-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2019, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', RIGHT_ARROW); // 2019
@@ -301,7 +307,7 @@ describe('DlDateTimePickerComponent', () => {
     });
 
     it('should change to previous decade when first .year is .active element and pressing on left arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2010-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2010, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', LEFT_ARROW); // 2019
@@ -327,7 +333,7 @@ describe('DlDateTimePickerComponent', () => {
     });
 
     it('should change to previous decade when first .year is .active element and pressing on up arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2014-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2014, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', UP_ARROW); // 2019
@@ -418,7 +424,7 @@ describe('DlDateTimePickerComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should emit a change event when clicking a .year', function () {
+    it('should store the value and emit change event when clicking a .year', function () {
       const changeSpy = jasmine.createSpy('change listener');
       component.picker.change.subscribe(changeSpy);
 
@@ -426,27 +432,13 @@ describe('DlDateTimePickerComponent', () => {
       yearElements[0].nativeElement.click();
       fixture.detectChanges();
 
+      // Truncate the last digit from the current year to get the start of the decade
+      const startDecade = (Math.trunc(moment().year() / 10) * 10);
+
+      const expectedTime = new Date(startDecade, JAN, 1).getTime();
+      expect(component.picker.value).toBe(expectedTime);
       expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(1262304000000);
-    });
-
-    it('should store the value internally when clicking a .year', function () {
-      const changeSpy = jasmine.createSpy('change listener');
-      component.picker.change.subscribe(changeSpy);
-
-      const yearElements = fixture.debugElement.queryAll(By.css('.year'));
-      yearElements[0].nativeElement.click();
-      fixture.detectChanges();
-
-      expect(component.picker.value).toBe(1262304000000);
-      expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(1262304000000);
+      expect(changeSpy.calls.first().args[0].utc).toBe(expectedTime);
     });
   });
-
-  // startDate
-  // filter / disable years
-  // filter / disable left button
-  // filter / disable right button
-  // Other screen reader issues - search for usability issues
 });

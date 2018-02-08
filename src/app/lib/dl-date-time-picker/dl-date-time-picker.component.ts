@@ -135,7 +135,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
-    this._model = this._viewToFactory[this._getStartView()].getModel(moment.utc().valueOf());
+    this._model = this._viewToFactory[this._getStartView()].getModel(moment().valueOf());
   }
 
   private _getStartView(): string {
@@ -178,7 +178,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   set value(value: number) {
     if (this._value !== value) {
       this._value = value;
-      this._model = this._viewToFactory[this._model.view].getModel(hasValue(this._value) ? this._value : moment.utc().valueOf());
+      this._model = this._viewToFactory[this._model.view].getModel(hasValue(this._value) ? this._value : moment().valueOf());
       this._changed.forEach(f => f(value));
       this.change.emit(new DlDateTimePickerChange(value));
     }

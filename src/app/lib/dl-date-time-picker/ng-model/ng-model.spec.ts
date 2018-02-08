@@ -4,6 +4,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {dispatchKeyboardEvent, ENTER, SPACE} from '../../../../testing/dispatch-events';
+import {JAN} from '../../../../testing/month-constants';
 
 @Component({
   template: '<dl-date-time-picker [(ngModel)]="selectedDate" startView="year" minView="year"></dl-date-time-picker>'
@@ -93,7 +94,7 @@ describe('DlDateTimePickerComponent', () => {
       yearElements[9].nativeElement.click(); // 2019-01-01
       fixture.detectChanges();
 
-      expect(component.selectedDate).toBe(1546300800000);
+      expect(component.selectedDate).toBe(new Date(2019, JAN, 1).getTime());
     });
 
     it('should store the value internally when clicking a .year', function () {
@@ -101,12 +102,13 @@ describe('DlDateTimePickerComponent', () => {
       component.picker.change.subscribe(changeSpy);
 
       const yearElements = fixture.debugElement.queryAll(By.css('.year'));
-      yearElements[8].nativeElement.click(); //
+      yearElements[8].nativeElement.click();  // 2018-01-01
       fixture.detectChanges();
 
-      expect(component.picker.value).toBe(1514764800000);
+      const expected = new Date(2018, JAN, 1).getTime();
+      expect(component.picker.value).toBe(expected);
       expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(1514764800000);
+      expect(changeSpy.calls.first().args[0].utc).toBe(expected);
     });
 
     it('should store the value in ngModel when hitting ENTER', () => {

@@ -5,9 +5,19 @@ import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import * as moment from 'moment';
 import {
-  dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
+  dispatchKeyboardEvent,
+  DOWN_ARROW,
+  END,
+  ENTER,
+  HOME,
+  LEFT_ARROW,
+  PAGE_DOWN,
+  PAGE_UP,
+  RIGHT_ARROW,
+  SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
+import {JAN} from '../../../../testing/month-constants';
 
 @Component({
 
@@ -18,11 +28,10 @@ class MinuteStartViewComponent {
 }
 
 @Component({
-
   template: '<dl-date-time-picker startView="minute" [(ngModel)]="selectedDate"></dl-date-time-picker>'
 })
 class MinuteStartViewWithNgModelComponent {
-  selectedDate = 1516982007932; // 26 Jan 2018 15:53:27 GMT
+  selectedDate = new Date(2018, JAN, 26, 15, 52, 26).getTime(); // 26 Jan 2018 15:53:27
   @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
 }
 
@@ -77,14 +86,14 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
       expect(currentElements.length).toBe(1);
 
-      const now = moment.utc();
-      const startDate = moment.utc(now).startOf('hour');
+      const now = moment();
+      const startDate = moment(now).startOf('hour');
 
       const step = 5;
 
       const minuteSteps = new Array(60 / step).fill(0).map((value, index) => index * step);
-      const minuteValues = minuteSteps.map((minutesToAdd) => moment.utc(startDate).add(minutesToAdd, 'minutes').valueOf());
-      const currentMoment = moment.utc(minuteValues.filter((value) => value < now.valueOf()).pop());
+      const minuteValues = minuteSteps.map((minutesToAdd) => moment(startDate).add(minutesToAdd, 'minutes').valueOf());
+      const currentMoment = moment(minuteValues.filter((value) => value < now.valueOf()).pop());
 
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentMoment.format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());
@@ -94,14 +103,14 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
 
-      const now = moment.utc();
-      const startDate = moment.utc(now).startOf('hour');
+      const now = moment();
+      const startDate = moment(now).startOf('hour');
 
       const step = 5;
 
       const minuteSteps = new Array(60 / step).fill(0).map((value, index) => index * step);
-      const minuteValues = minuteSteps.map((minutesToAdd) => moment.utc(startDate).add(minutesToAdd, 'minutes').valueOf());
-      const currentMoment = moment.utc(minuteValues.filter((value) => value < now.valueOf()).pop());
+      const minuteValues = minuteSteps.map((minutesToAdd) => moment(startDate).add(minutesToAdd, 'minutes').valueOf());
+      const currentMoment = moment(minuteValues.filter((value) => value < now.valueOf()).pop());
 
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentMoment.format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());
@@ -131,27 +140,16 @@ describe('DlDateTimePickerComponent startView=minute', () => {
     });
 
     it('should contain 12 .minute elements with start of minute utc time as class and role of gridcell', () => {
-      const expectedClass = [
-        1516978800000,
-        1516979100000,
-        1516979400000,
-        1516979700000,
-        1516980000000,
-        1516980300000,
-        1516980600000,
-        1516980900000,
-        1516981200000,
-        1516981500000,
-        1516981800000,
-        1516982100000
-      ];
+      const expectedClass = new Array(12)
+        .fill(0)
+        .map((value, index) => new Date(2018, JAN , 26, 15, 5 * index).getTime());
 
       const minuteElements = fixture.debugElement.queryAll(By.css('.minute'));
       expect(minuteElements.length).toBe(12);
 
       minuteElements.forEach((minuteElement, index) => {
         const key = expectedClass[index];
-        const ariaLabel = moment.utc(key).format('LLL');
+        const ariaLabel = moment(key).format('LLL');
         expect(minuteElement.nativeElement.classList).toContain(key.toString(10));
         expect(minuteElement.attributes['role']).toBe('gridcell', index);
         expect(minuteElement.attributes['aria-label']).toBe(ariaLabel, index);
@@ -170,7 +168,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
 
     it('should have a class for previous hour value on .left-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.left-button'));
-      expect(leftButton.nativeElement.classList).toContain('1516975200000');
+      expect(leftButton.nativeElement.classList).toContain(new Date(2018, JAN, 26, 14).getTime().toString());
     });
 
     it('should switch to previous hour value after clicking .left-button', () => {
@@ -183,7 +181,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
 
       const minuteElements = fixture.debugElement.queryAll(By.css('.minute'));
       expect(minuteElements[0].nativeElement.textContent.trim()).toBe('2:00 PM');
-      expect(minuteElements[0].nativeElement.classList).toContain('1516975200000');
+      expect(minuteElements[0].nativeElement.classList).toContain(new Date(2018, JAN, 26, 14).getTime().toString());
     });
 
     it('.right-button should contain a title', () => {
@@ -196,9 +194,9 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       expect(leftButton.attributes['aria-label']).toBe('Go to Jan 26, 2018 4:00 PM');
     });
 
-    it('should have a class for previous hour value on .right-button ', () => {
+    it('should have a class for next hour value on .right-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.right-button'));
-      expect(leftButton.nativeElement.classList).toContain('1516982400000');
+      expect(leftButton.nativeElement.classList).toContain(new Date(2018, JAN, 26, 16).getTime().toString());
     });
 
     it('should switch to next hour value after clicking .right-button', () => {
@@ -211,7 +209,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
 
       const minuteElements = fixture.debugElement.queryAll(By.css('.minute'));
       expect(minuteElements[0].nativeElement.textContent.trim()).toBe('4:00 PM');
-      expect(minuteElements[0].nativeElement.classList).toContain('1516982400000');
+      expect(minuteElements[0].nativeElement.classList).toContain(new Date(2018, JAN, 26, 16).getTime().toString());
     });
 
     it('.up-button should contain a title', () => {
@@ -252,7 +250,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       minuteElements[6].nativeElement.click(); //  15:30
       fixture.detectChanges();
 
-      expect(component.picker.value).toBe(1516980600000);
+      expect(component.picker.value).toBe(new Date(2018, JAN, 26, 15, 30).getTime());
     });
 
     it('should have one .active element', () => {
@@ -274,7 +272,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
 
     it('should change to next hour when last .minute is .active element and pressing on right arrow', () => {
       // DDL: setting the activeDate here does not work. I'm not sure why.
-      component.picker.value = new Date('2018-01-26T15:55:00Z').getTime();
+      component.picker.value = new Date(2018, JAN, 26, 15, 55).getTime();
       fixture.detectChanges();
 
       expect(fixture.debugElement.query(By.css('.active')).nativeElement.textContent).toBe('3:55 PM');
@@ -302,7 +300,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
     });
 
     it('should change to previous hour when first .minute is .active element and pressing on left arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-26T15:00:00Z').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26, 15).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', LEFT_ARROW); // 2019
@@ -328,7 +326,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
     });
 
     it('should change to previous hour when first .minute is .active element and pressing on up arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-26T15:00:00Z').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26, 15).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', UP_ARROW);
@@ -342,7 +340,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
     });
 
     it('should change .active element on down arrow', () => {
-      component.picker.value = new Date('2018-01-26T15:30:00Z').getTime();
+      component.picker.value = new Date(2018, JAN, 26, 15, 30).getTime();
       fixture.detectChanges();
 
       const activeElement = fixture.debugElement.query(By.css('.active'));
@@ -435,7 +433,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       const minuteView = fixture.debugElement.query(By.css('.minute-view'));
       expect(minuteView).toBeTruthy();
       expect(changeSpy).toHaveBeenCalled();
-      expect(component.picker.value).toBe(1516981800000);
+      expect(component.picker.value).toBe(new Date(2018, JAN, 26, 15, 50).getTime()); // 2018-01-26T15:50
     });
 
     it('should emit change event when hitting SPACE', () => {
@@ -450,7 +448,8 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       const minuteView = fixture.debugElement.query(By.css('.minute-view'));
       expect(minuteView).toBeTruthy();
       expect(changeSpy).toHaveBeenCalled();
-      expect(component.picker.value).toBe(1516981800000);
+
+      expect(component.picker.value).toBe(new Date(2018, JAN, 26, 15, 50).getTime()); // 2018-01-26T15:50
     });
   });
 });

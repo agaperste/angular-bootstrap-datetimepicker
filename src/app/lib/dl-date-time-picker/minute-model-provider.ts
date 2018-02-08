@@ -16,13 +16,17 @@ export class MinuteModelProvider implements ModelProvider {
   private step = 5;
 
   getModel(milliseconds: number): DlDateTimePickerModel {
-    const startDate = moment.utc(milliseconds).startOf('hour');
+    const startDate = moment(milliseconds).startOf('hour');
+    const currentMilliseconds = moment().valueOf();
 
     const minuteSteps = new Array(60 / this.step).fill(0).map((value, index) => index * this.step);
-    const minuteValues = minuteSteps.map((minutesToAdd) => moment.utc(startDate).add(minutesToAdd, 'minutes').valueOf());
-    const currentMoment = moment.utc(minuteValues.filter((value) => value <= milliseconds).pop());
-    const previousHour = moment.utc(startDate).subtract(1, 'hour');
-    const nextHour = moment.utc(startDate).add(1, 'hour');
+    const minuteValues = minuteSteps.map((minutesToAdd) => moment(startDate).add(minutesToAdd, 'minutes').valueOf());
+
+
+    const activeMoment = moment(minuteValues.filter((value) => value <= milliseconds).pop());
+    const todayMoment = moment(minuteValues.filter((value) => value <= currentMilliseconds).pop());
+    const previousHour = moment(startDate).subtract(1, 'hour');
+    const nextHour = moment(startDate).add(1, 'hour');
 
     const rows = new Array(minuteSteps.length / 4)
       .fill(0)
@@ -34,7 +38,7 @@ export class MinuteModelProvider implements ModelProvider {
     const result: DlDateTimePickerModel = {
       view: 'minute',
       viewLabel: startDate.format('lll'),
-      activeDate: currentMoment.valueOf(),
+      activeDate: activeMoment.valueOf(),
       leftButton: {
         value: previousHour.valueOf(),
         ariaLabel: `Go to ${previousHour.format('lll')}`,
@@ -64,49 +68,49 @@ export class MinuteModelProvider implements ModelProvider {
       value: number;
       classes: {};
     } {
-      const minuteMoment = moment.utc(startDate).add(stepMinutes, 'minutes');
+      const minuteMoment = moment(startDate).add(stepMinutes, 'minutes');
       return {
         display: minuteMoment.format('LT'),
         ariaLabel: minuteMoment.format('LLL'),
         value: minuteMoment.valueOf(),
         classes: {
-          today: minuteMoment.isSame(currentMoment, 'minute'),
+          today: minuteMoment.isSame(todayMoment, 'minute'),
         }
       };
     }
   }
 
   goUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).subtract(this.step * 4, 'minutes').valueOf());
+    return this.getModel(moment(fromMilliseconds).subtract(this.step * 4, 'minutes').valueOf());
   }
 
   goDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).add(this.step * 4, 'minutes').valueOf());
+    return this.getModel(moment(fromMilliseconds).add(this.step * 4, 'minutes').valueOf());
   }
 
   goLeft(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).subtract(this.step, 'minutes').valueOf());
+    return this.getModel(moment(fromMilliseconds).subtract(this.step, 'minutes').valueOf());
   }
 
   goRight(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).add(this.step, 'minutes').valueOf());
+    return this.getModel(moment(fromMilliseconds).add(this.step, 'minutes').valueOf());
   }
 
   pageUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).subtract(1, 'hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'hour').valueOf());
   }
 
   pageDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).add(1, 'hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).add(1, 'hour').valueOf());
   }
 
   goEnd(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds)
+    return this.getModel(moment(fromMilliseconds)
       .endOf('hour')
       .valueOf());
   }
 
   goHome(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).startOf('hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).startOf('hour').valueOf());
   }
 }

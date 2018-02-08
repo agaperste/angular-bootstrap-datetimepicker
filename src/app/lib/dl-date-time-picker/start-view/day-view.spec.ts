@@ -5,9 +5,19 @@ import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import * as moment from 'moment';
 import {
-  dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
+  dispatchKeyboardEvent,
+  DOWN_ARROW,
+  END,
+  ENTER,
+  HOME,
+  LEFT_ARROW,
+  PAGE_DOWN,
+  PAGE_UP,
+  RIGHT_ARROW,
+  SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
+import {DEC, JAN, NOV} from '../../../../testing/month-constants';
 
 @Component({
   template: '<dl-date-time-picker></dl-date-time-picker>'
@@ -20,7 +30,7 @@ class DayStartViewComponent {
   template: '<dl-date-time-picker [(ngModel)]="selectedDate"></dl-date-time-picker>'
 })
 class DayStartViewWithNgModelComponent {
-  selectedDate = 1515628800000; // 2018-01-11
+  selectedDate = new Date(2018, JAN, 11).getTime();
   @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
 }
 
@@ -73,7 +83,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
       const dayLabelElements = fixture.debugElement.queryAll(By.css('.col-label'));
       expect(dayLabelElements.length).toBe(7);
       dayLabelElements.forEach((dayLabelElement, index) => {
-        expect(dayLabelElement.nativeElement.textContent).toBe(moment.utc().weekday(index).format('dd'));
+        expect(dayLabelElement.nativeElement.textContent).toBe(moment().weekday(index).format('dd'));
       });
     });
 
@@ -85,15 +95,15 @@ describe('DlDateTimePickerComponent startView=day', () => {
     it('should contain 1 .today element for the current day', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('D'));
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('day').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().format('D'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('day').valueOf().toString());
     });
 
     it('should contain 1 .active element for the current day', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('D'));
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('day').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().format('D'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('day').valueOf().toString());
     });
   });
 
@@ -137,7 +147,6 @@ describe('DlDateTimePickerComponent startView=day', () => {
       });
     }));
 
-
     it('should contain .view-label element with "2018"', () => {
       const viewLabel = fixture.debugElement.query(By.css('.view-label'));
       expect(viewLabel.nativeElement.textContent.trim()).toBe('Jan 2018');
@@ -157,57 +166,17 @@ describe('DlDateTimePickerComponent startView=day', () => {
 
     it('should contain 42 .day elements with start of day utc time as class and role of gridcell', () => {
 
-      const expectedClass = [
-        1514678400000,
-        1514764800000,
-        1514851200000,
-        1514937600000,
-        1515024000000,
-        1515110400000,
-        1515196800000,
-        1515283200000,
-        1515369600000,
-        1515456000000,
-        1515542400000,
-        1515628800000,
-        1515715200000,
-        1515801600000,
-        1515888000000,
-        1515974400000,
-        1516060800000,
-        1516147200000,
-        1516233600000,
-        1516320000000,
-        1516406400000,
-        1516492800000,
-        1516579200000,
-        1516665600000,
-        1516752000000,
-        1516838400000,
-        1516924800000,
-        1517011200000,
-        1517097600000,
-        1517184000000,
-        1517270400000,
-        1517356800000,
-        1517443200000,
-        1517529600000,
-        1517616000000,
-        1517702400000,
-        1517788800000,
-        1517875200000,
-        1517961600000,
-        1518048000000,
-        1518134400000,
-        1518220800000
-      ];
+      const startMoment = moment(new Date(2017, DEC, 31));
+      const expectedClass = new Array(42)
+        .fill(0)
+        .map((value, index) => moment(startMoment).add(index, 'days').valueOf());
 
       const dayElements = fixture.debugElement.queryAll(By.css('.day'));
       expect(dayElements.length).toBe(42);
 
       dayElements.forEach((dayElement, index) => {
         const key = expectedClass[index];
-        const ariaLabel = moment.utc(key).format('ll');
+        const ariaLabel = moment(key).format('ll');
         expect(dayElement.nativeElement.classList).toContain(key.toString(10));
         expect(dayElement.attributes['role']).toBe('gridcell', index);
         expect(dayElement.attributes['aria-label']).toBe(ariaLabel, index);
@@ -226,7 +195,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
 
     it('should have a class for previous month value on .left-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.left-button'));
-      expect(leftButton.nativeElement.classList).toContain('1512086400000');
+      expect(leftButton.nativeElement.classList).toContain(new Date(2017, DEC, 1).getTime().toString());
     });
 
     it('should switch to previous month value after clicking .left-button', () => {
@@ -239,7 +208,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
 
       const dayElements = fixture.debugElement.queryAll(By.css('.day'));
       expect(dayElements[0].nativeElement.textContent.trim()).toBe('26');
-      expect(dayElements[0].nativeElement.classList).toContain('1511654400000');
+      expect(dayElements[0].nativeElement.classList).toContain(new Date(2017, NOV, 26).getTime().toString());
     });
 
     it('.right-button should contain a title', () => {
@@ -262,7 +231,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
 
       const dayElements = fixture.debugElement.queryAll(By.css('.day'));
       expect(dayElements[0].nativeElement.textContent.trim()).toBe('28');
-      expect(dayElements[0].nativeElement.classList).toContain('1517097600000');
+      expect(dayElements[0].nativeElement.classList).toContain(new Date(2018, JAN, 28).getTime().toString());
     });
 
     it('.up-button should contain a title', () => {
@@ -328,7 +297,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
     });
 
     it('should change to next month when last .day is .active element and pressing on right arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-31').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 31).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', RIGHT_ARROW); // 2018
@@ -354,7 +323,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
     });
 
     it('should change to previous month when first .day is .active element and pressing on left arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', LEFT_ARROW); // 2019
@@ -380,7 +349,7 @@ describe('DlDateTimePickerComponent startView=day', () => {
     });
 
     it('should change to previous month when first .day is .active element and pressing on up arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', UP_ARROW); // 2019

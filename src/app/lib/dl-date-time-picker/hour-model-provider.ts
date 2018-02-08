@@ -14,18 +14,18 @@ import {NgModule} from '@angular/core';
 export class HourModelProvider implements ModelProvider {
 
   getModel(milliseconds: number): DlDateTimePickerModel {
-    const startDate = moment.utc(milliseconds).startOf('day');
+    const startDate = moment(milliseconds).startOf('day');
 
     const rowNumbers = [0, 1, 2, 3, 4, 5];
     const columnNumbers = [0, 1, 2, 3];
 
-    const previousDay = moment.utc(startDate).subtract(1, 'day');
-    const nextDay = moment.utc(startDate).add(1, 'day');
+    const previousDay = moment(startDate).subtract(1, 'day');
+    const nextDay = moment(startDate).add(1, 'day');
 
     const result: DlDateTimePickerModel = {
       view: 'hour',
       viewLabel: startDate.format('ll'),
-      activeDate: moment.utc(milliseconds).startOf('hour').valueOf(),
+      activeDate: moment(milliseconds).startOf('hour').valueOf(),
       leftButton: {
         value: previousDay.valueOf(),
         ariaLabel: `Go to ${previousDay.format('ll')}`,
@@ -51,9 +51,9 @@ export class HourModelProvider implements ModelProvider {
 
     function rowOfHours(rowNumber) {
 
-      const currentMoment = moment.utc();
+      const currentMoment = moment();
       const cells = columnNumbers.map((columnNumber) => {
-        const hourMoment = moment.utc(startDate).add((rowNumber * columnNumbers.length) + columnNumber, 'hours');
+        const hourMoment = moment(startDate).add((rowNumber * columnNumbers.length) + columnNumber, 'hours');
         return {
           display: hourMoment.format('LT'),
           ariaLabel: hourMoment.format('LLL'),
@@ -68,33 +68,33 @@ export class HourModelProvider implements ModelProvider {
   }
 
   goUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).subtract(4, 'hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).subtract(4, 'hour').valueOf());
   }
 
   goDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).add(4, 'hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).add(4, 'hour').valueOf());
   }
 
   goLeft(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).subtract(1, 'hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'hour').valueOf());
   }
 
   goRight(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).add(1, 'hour').valueOf());
+    return this.getModel(moment(fromMilliseconds).add(1, 'hour').valueOf());
   }
 
   pageUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).subtract(1, 'day').valueOf());
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'day').valueOf());
   }
 
   pageDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).add(1, 'day').valueOf());
+    return this.getModel(moment(fromMilliseconds).add(1, 'day').valueOf());
   }
 
   goEnd(fromMilliseconds: number): DlDateTimePickerModel {
     return this.getModel(
       moment
-        .utc(fromMilliseconds)
+        (fromMilliseconds)
         .endOf('day')
         .startOf('hour')
         .valueOf()
@@ -102,6 +102,6 @@ export class HourModelProvider implements ModelProvider {
   }
 
   goHome(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment.utc(fromMilliseconds).startOf('day').valueOf());
+    return this.getModel(moment(fromMilliseconds).startOf('day').valueOf());
   }
 }

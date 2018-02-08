@@ -8,6 +8,7 @@ import {
   dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
+import {JAN} from '../../../../testing/month-constants';
 
 @Component({
 
@@ -22,7 +23,7 @@ class HourStartViewComponent {
   template: '<dl-date-time-picker startView="hour" [(ngModel)]="selectedDate"></dl-date-time-picker>'
 })
 class HourStartViewWithNgModelComponent {
-  selectedDate = 1516982007932; // 26 Jan 2018 15:53:27 GMT
+  selectedDate = new Date(2018, JAN, 26, 15, 53, 27).getTime();
   @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
 }
 
@@ -76,15 +77,15 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     it('should contain 1 .today element for the current hour', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().startOf('hour').format('LT'));
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('hour').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().startOf('hour').format('LT'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('hour').valueOf().toString());
     });
 
     it('should contain 1 .active element for the current hour', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().startOf('hour').format('LT'));
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('hour').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().startOf('hour').format('LT'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('hour').valueOf().toString());
     });
   });
 
@@ -112,39 +113,16 @@ describe('DlDateTimePickerComponent startView=hour', () => {
 
     it('should contain 24 .hour elements with start of hour utc time as class and role of gridcell', () => {
 
-      const expectedClass = [
-        1516924800000,
-        1516928400000,
-        1516932000000,
-        1516935600000,
-        1516939200000,
-        1516942800000,
-        1516946400000,
-        1516950000000,
-        1516953600000,
-        1516957200000,
-        1516960800000,
-        1516964400000,
-        1516968000000,
-        1516971600000,
-        1516975200000,
-        1516978800000,
-        1516982400000,
-        1516986000000,
-        1516989600000,
-        1516993200000,
-        1516996800000,
-        1517000400000,
-        1517004000000,
-        1517007600000,
-      ];
+      const expectedClass = new Array(24)
+        .fill(0)
+        .map((value, index) => new Date(2018, JAN , 26,  index).getTime());
 
       const hourElements = fixture.debugElement.queryAll(By.css('.hour'));
       expect(hourElements.length).toBe(24);
 
       hourElements.forEach((hourElement, index) => {
         const key = expectedClass[index];
-        const ariaLabel = moment.utc(key).format('LLL');
+        const ariaLabel = moment(key).format('LLL');
         expect(hourElement.nativeElement.classList).toContain(key.toString(10));
         expect(hourElement.attributes['role']).toBe('gridcell', index);
         expect(hourElement.attributes['aria-label']).toBe(ariaLabel, index);
@@ -163,7 +141,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
 
     it('should have a class for previous month value on .left-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.left-button'));
-      expect(leftButton.nativeElement.classList).toContain('1516838400000');
+      expect(leftButton.nativeElement.classList).toContain(new Date(2018, JAN, 25).getTime().toString());
     });
 
     it('should switch to previous month value after clicking .left-button', () => {
@@ -176,7 +154,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
 
       const hourElements = fixture.debugElement.queryAll(By.css('.hour'));
       expect(hourElements[0].nativeElement.textContent.trim()).toBe('12:00 AM');
-      expect(hourElements[0].nativeElement.classList).toContain('1516838400000');
+      expect(hourElements[0].nativeElement.classList).toContain(new Date(2018, JAN, 25).getTime().toString());
     });
 
     it('.right-button should contain a title', () => {
@@ -191,7 +169,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
 
     it('should have a class for previous month value on .right-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.right-button'));
-      expect(leftButton.nativeElement.classList).toContain('1517011200000');
+      expect(leftButton.nativeElement.classList).toContain(new Date(2018, JAN, 27).getTime().toString());
     });
 
     it('should switch to next month value after clicking .right-button', () => {
@@ -204,7 +182,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
 
       const hourElements = fixture.debugElement.queryAll(By.css('.hour'));
       expect(hourElements[0].nativeElement.textContent.trim()).toBe('12:00 AM');
-      expect(hourElements[0].nativeElement.classList).toContain('1517011200000');
+      expect(hourElements[0].nativeElement.classList).toContain(new Date(2018, JAN, 27).getTime().toString());
     });
 
     it('.up-button should contain a title', () => {
@@ -270,7 +248,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     });
 
     it('should change to next day when last .hour is .active element and pressing on right arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-26T23:00:00Z').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26, 23).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', RIGHT_ARROW); // 2018
@@ -296,7 +274,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     });
 
     it('should change to previous day when first .hour is .active element and pressing on left arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-26T00:00:00Z').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26 ).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', LEFT_ARROW); // 2019
@@ -322,7 +300,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     });
 
     it('should change to previous day when first .hour is .active element and pressing on up arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2018-01-26T00:00:00Z').getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26 ).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', UP_ARROW); // 2019

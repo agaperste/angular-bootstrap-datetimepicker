@@ -8,6 +8,7 @@ import {
   dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
+import {DEC, JAN} from '../../../../testing/month-constants';
 
 @Component({
   template: '<dl-date-time-picker startView="month"></dl-date-time-picker>'
@@ -21,7 +22,7 @@ class MonthStartViewComponent {
   template: '<dl-date-time-picker startView="month" [(ngModel)]="selectedDate"></dl-date-time-picker>'
 })
 class MonthStartViewWithNgModelComponent {
-  selectedDate = 1514160000000; // 2017-12-22
+  selectedDate = new Date(2017, DEC, 22).getTime();
   @ViewChild(DlDateTimePickerComponent) picker: DlDateTimePickerComponent;
 }
 
@@ -74,15 +75,15 @@ describe('DlDateTimePickerComponent startView=month', () => {
     it('should contain 1 .today element for the current month', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.today'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('MMM'));
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('month').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().format('MMM'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('month').valueOf().toString());
     });
 
     it('should contain 1 .active element for the current month', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
-      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment.utc().format('MMM'));
-      expect(currentElements[0].nativeElement.classList).toContain(moment.utc().startOf('month').valueOf().toString());
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().format('MMM'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('month').valueOf().toString());
     });
   });
 
@@ -111,28 +112,17 @@ describe('DlDateTimePickerComponent startView=month', () => {
 
     it('should contain 12 .month elements with start of month utc time as class and role of gridcell', () => {
 
-      const expectedClass = [
-        1483228800000,
-        1485907200000,
-        1488326400000,
-        1491004800000,
-        1493596800000,
-        1496275200000,
-        1498867200000,
-        1501545600000,
-        1504224000000,
-        1506816000000,
-        1509494400000,
-        1512086400000
-      ];
+      const expectedClass = new Array(12)
+        .fill(0)
+        .map((value, index) => new Date(2017, JAN + index, 1).getTime());
 
       const monthElements = fixture.debugElement.queryAll(By.css('.month'));
       expect(monthElements.length).toBe(12);
 
       monthElements.forEach((monthElement, index) => {
         const key = expectedClass[index];
-        const ariaLabel = moment.utc(key).format('MMM YYYY');
-        expect(monthElement.nativeElement.classList).toContain(key.toString(10));
+        const ariaLabel = moment(key).format('MMM YYYY');
+        expect(monthElement.nativeElement.classList).toContain(key.toString());
         expect(monthElement.attributes['role']).toBe('gridcell', index);
         expect(monthElement.attributes['aria-label']).toBe(ariaLabel, index);
       });
@@ -150,7 +140,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
 
     it('should have a class for previous year value on .left-button ', () => {
       const leftButton = fixture.debugElement.query(By.css('.left-button'));
-      expect(leftButton.nativeElement.classList).toContain('1451606400000');
+      expect(leftButton.nativeElement.classList).toContain(new Date(2016, JAN, 1).getTime().toString());
     });
 
     it('should switch to previous year value after clicking .left-button', () => {
@@ -163,7 +153,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
 
       const monthElements = fixture.debugElement.queryAll(By.css('.month'));
       expect(monthElements[0].nativeElement.textContent.trim()).toBe('Jan');
-      expect(monthElements[0].nativeElement.classList).toContain('1451606400000');
+      expect(monthElements[0].nativeElement.classList).toContain(new Date(2016, JAN, 1).getTime().toString());
     });
 
     it('.right-button should contain a title', () => {
@@ -176,9 +166,9 @@ describe('DlDateTimePickerComponent startView=month', () => {
       expect(leftButton.attributes['aria-label']).toBe('Go to 2018');
     });
 
-    it('should have a class for previous year value on .right-button ', () => {
-      const leftButton = fixture.debugElement.query(By.css('.right-button'));
-      expect(leftButton.nativeElement.classList).toContain('1514764800000');
+    it('should have a class for next year value on .right-button ', () => {
+      const rightButton = fixture.debugElement.query(By.css('.right-button'));
+      expect(rightButton.nativeElement.classList).toContain(new Date(2018, JAN, 1).getTime().toString());
     });
 
     it('should switch to next year value after clicking .right-button', () => {
@@ -191,7 +181,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
 
       const monthElements = fixture.debugElement.queryAll(By.css('.month'));
       expect(monthElements[0].nativeElement.textContent.trim()).toBe('Jan');
-      expect(monthElements[0].nativeElement.classList).toContain('1514764800000');
+      expect(monthElements[0].nativeElement.classList).toContain(new Date(2018, JAN, 1).getTime().toString());
     });
 
     it('.up-button should contain a title', () => {
@@ -257,7 +247,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
     });
 
     it('should change to next year when last .month is .active element and pressing on right arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2017-12-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2017, DEC, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', RIGHT_ARROW); // 2018
@@ -283,7 +273,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
     });
 
     it('should change to previous year when first .month is .active element and pressing on left arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2017-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2017, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', LEFT_ARROW); // 2019
@@ -309,7 +299,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
     });
 
     it('should change to previous year when first .month is .active element and pressing on up arrow', () => {
-      (component.picker as any)._model.activeDate = new Date('2017-01-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2017, JAN, 1).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', UP_ARROW); // 2019
@@ -389,7 +379,7 @@ describe('DlDateTimePickerComponent startView=month', () => {
     });
 
     it('should do nothing when hitting non-supported key', () => {
-      (component.picker as any)._model.activeDate = new Date('2017-12-01').getTime();
+      (component.picker as any)._model.activeDate = new Date(2017, DEC, 1).getTime();
       fixture.detectChanges();
 
       let activeElement = fixture.debugElement.query(By.css('.active'));
