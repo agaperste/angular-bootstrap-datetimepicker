@@ -2,7 +2,7 @@ import {DlModelProvider} from './dl-model-provider';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {NgModule} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
 
 @NgModule({
   providers: [

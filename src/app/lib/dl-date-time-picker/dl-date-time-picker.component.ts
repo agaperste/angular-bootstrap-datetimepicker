@@ -9,6 +9,7 @@ import {DlMonthModelProvider} from './dl-month-model-provider';
 import {DlDayModelProvider} from './dl-day-model-provider';
 import {DlHourModelProvider} from './dl-hour-model-provider';
 import {DlMinuteModelProvider} from './dl-minute-model-provider';
+import {CommonModule} from '@angular/common';
 
 const DOWN_ARROW = 40;
 const END = 35;
