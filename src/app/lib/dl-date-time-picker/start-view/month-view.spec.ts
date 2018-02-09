@@ -5,10 +5,24 @@ import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import * as moment from 'moment';
 import {
-  dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
+  dispatchKeyboardEvent,
+  DOWN_ARROW,
+  END,
+  ENTER,
+  HOME,
+  LEFT_ARROW,
+  PAGE_DOWN,
+  PAGE_UP,
+  RIGHT_ARROW,
+  SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
 import {DEC, JAN} from '../../../../testing/month-constants';
+import {DlYearModelComponent} from '../dl-year-model.component';
+import {DlMinuteModelComponent} from '../dl-minute-model.component';
+import {DlMonthModelComponent} from '../dl-month-model.component';
+import {DlDayModelComponent} from '../dl-day-model.component';
+import {DlHourModelComponent} from '../dl-hour-model.component';
 
 @Component({
   template: '<dl-date-time-picker startView="month"></dl-date-time-picker>'
@@ -35,6 +49,13 @@ describe('DlDateTimePickerComponent startView=month', () => {
         DlDateTimePickerComponent,
         MonthStartViewComponent,
         MonthStartViewWithNgModelComponent
+      ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
       ]
     })
       .compileComponents();

@@ -2,6 +2,11 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { DlDateTimePickerComponent } from './lib/dl-date-time-picker/dl-date-time-picker.component';
 import {FormsModule} from '@angular/forms';
+import {DlYearModelComponent} from './lib/dl-date-time-picker/dl-year-model.component';
+import {DlMinuteModelComponent} from './lib/dl-date-time-picker/dl-minute-model.component';
+import {DlMonthModelComponent} from './lib/dl-date-time-picker/dl-month-model.component';
+import {DlDayModelComponent} from './lib/dl-date-time-picker/dl-day-model.component';
+import {DlHourModelComponent} from './lib/dl-date-time-picker/dl-hour-model.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -11,6 +16,13 @@ describe('AppComponent', () => {
         AppComponent,
         DlDateTimePickerComponent
       ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
+      ]
     }).compileComponents();
   }));
   it('should create the app', async(() => {

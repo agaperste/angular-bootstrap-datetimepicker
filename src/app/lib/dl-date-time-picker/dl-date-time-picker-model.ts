@@ -1,5 +1,3 @@
-
-
 export interface DlDateTimePickerModel {
   view: string;
   viewLabel: string;

@@ -5,6 +5,11 @@ import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {dispatchKeyboardEvent, ENTER, SPACE} from '../../../../testing/dispatch-events';
 import {JAN} from '../../../../testing/month-constants';
+import {DlYearModelComponent} from '../dl-year-model.component';
+import {DlMinuteModelComponent} from '../dl-minute-model.component';
+import {DlMonthModelComponent} from '../dl-month-model.component';
+import {DlDayModelComponent} from '../dl-day-model.component';
+import {DlHourModelComponent} from '../dl-hour-model.component';
 
 @Component({
   template: '<dl-date-time-picker [(ngModel)]="selectedDate" startView="year" minView="year"></dl-date-time-picker>'
@@ -21,7 +26,15 @@ describe('DlDateTimePickerComponent', () => {
       imports: [FormsModule],
       declarations: [
         DlDateTimePickerComponent,
-        YearSelectorComponent]
+        YearSelectorComponent
+      ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
+      ]
     })
       .compileComponents();
   }));

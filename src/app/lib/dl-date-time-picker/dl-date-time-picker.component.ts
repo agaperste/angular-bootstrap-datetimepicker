@@ -49,6 +49,10 @@ export class DlDateTimePickerChange {
   }
 }
 
+/**
+ * Component that provides all of the user facing functionality of the date/time picker.
+ */
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false,
@@ -57,12 +61,7 @@ export class DlDateTimePickerChange {
       provide: NG_VALUE_ACCESSOR,
       useExisting: DlDateTimePickerComponent,
       multi: true
-    },
-    DlYearModelComponent,
-    DlMonthModelComponent,
-    DlDayModelComponent,
-    DlHourModelComponent,
-    DlMinuteModelComponent
+    }
   ],
   selector: 'dl-date-time-picker',
   styleUrls: ['./dl-date-time-picker.component.css'],
@@ -97,7 +96,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     'oi-chevron-right'
   ];
 
-
   /** Emits when a `change` event is fired on this date/time picker. */
   @Output()
   readonly change = new EventEmitter<DlDateTimePickerChange>();
@@ -110,9 +108,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   /** @internal */
   private _touched: (() => void)[] = [];
   /** @internal */
-  private _value: number;
-
-  /** @internal */
   private _viewToFactory: {
     year: DlModelProvider;
     month: DlModelProvider;
@@ -120,7 +115,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     hour: DlModelProvider;
     minute: DlModelProvider;
   };
-
   /** @internal */
   private _nextView = {
     'year': 'month',
@@ -128,7 +122,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     'day': 'hour',
     'hour': 'minute'
   };
-
   /** @internal */
   private _previousView = {
     'minute': 'hour',
@@ -154,14 +147,24 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     };
   }
 
-  ngOnInit(): void {
-    this._model = this._viewToFactory[this._getStartView()].getModel(moment().valueOf());
+  /** @internal */
+  private _value: number;
+
+  get value() {
+    return this._value;
   }
 
-  /** @internal */
-  private _getStartView(): string {
-    const startIndex = Math.max(VIEWS.indexOf(this.minView || 'minute'), VIEWS.indexOf(this.startView || 'day'));
-    return VIEWS[startIndex];
+  set value(value: number) {
+    if (this._value !== value) {
+      this._value = value;
+      this._model = this._viewToFactory[this._model.view].getModel(hasValue(this._value) ? this._value : moment().valueOf());
+      this._changed.forEach(f => f(value));
+      this.change.emit(new DlDateTimePickerChange(value));
+    }
+  }
+
+  ngOnInit(): void {
+    this._model = this._viewToFactory[this._getStartView()].getModel(moment().valueOf());
   }
 
   /** @internal */
@@ -196,19 +199,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     this._onTouch();
   }
 
-  get value() {
-    return this._value;
-  }
-
-  set value(value: number) {
-    if (this._value !== value) {
-      this._value = value;
-      this._model = this._viewToFactory[this._model.view].getModel(hasValue(this._value) ? this._value : moment().valueOf());
-      this._changed.forEach(f => f(value));
-      this.change.emit(new DlDateTimePickerChange(value));
-    }
-  }
-
   writeValue(value: number) {
     this.value = value;
   }
@@ -219,11 +209,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   registerOnTouched(fn: () => void) {
     this._touched.push(fn);
-  }
-
-  /** @internal */
-  private _onTouch() {
-    this._touched.forEach((onTouch) => onTouch());
   }
 
   /** @internal */
@@ -273,6 +258,17 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     this._focusActiveCell();
     // Prevent unexpected default actions such as form submission.
     event.preventDefault();
+  }
+
+  /** @internal */
+  private _getStartView(): string {
+    const startIndex = Math.max(VIEWS.indexOf(this.minView || 'minute'), VIEWS.indexOf(this.startView || 'day'));
+    return VIEWS[startIndex];
+  }
+
+  /** @internal */
+  private _onTouch() {
+    this._touched.forEach((onTouch) => onTouch());
   }
 
   /**

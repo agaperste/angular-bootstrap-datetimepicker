@@ -18,6 +18,11 @@ import {
   UP_ARROW
 } from '../../../../testing/dispatch-events';
 import {DEC, JAN, NOV} from '../../../../testing/month-constants';
+import {DlYearModelComponent} from '../dl-year-model.component';
+import {DlMinuteModelComponent} from '../dl-minute-model.component';
+import {DlMonthModelComponent} from '../dl-month-model.component';
+import {DlDayModelComponent} from '../dl-day-model.component';
+import {DlHourModelComponent} from '../dl-hour-model.component';
 
 @Component({
   template: '<dl-date-time-picker></dl-date-time-picker>'
@@ -52,6 +57,13 @@ describe('DlDateTimePickerComponent startView=day', () => {
         DayStartViewComponent,
         DayStartViewWithNgModelComponent,
         UndefinedStartViewComponent
+      ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
       ]
     })
       .compileComponents();

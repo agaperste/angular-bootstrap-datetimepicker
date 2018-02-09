@@ -18,6 +18,11 @@ import {
   UP_ARROW
 } from '../../../../testing/dispatch-events';
 import {JAN} from '../../../../testing/month-constants';
+import {DlYearModelComponent} from '../dl-year-model.component';
+import {DlMinuteModelComponent} from '../dl-minute-model.component';
+import {DlMonthModelComponent} from '../dl-month-model.component';
+import {DlDayModelComponent} from '../dl-day-model.component';
+import {DlHourModelComponent} from '../dl-hour-model.component';
 
 @Component({
 
@@ -45,6 +50,13 @@ describe('DlDateTimePickerComponent startView=minute', () => {
         DlDateTimePickerComponent,
         MinuteStartViewComponent,
         MinuteStartViewWithNgModelComponent,
+      ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
       ]
     })
       .compileComponents();
@@ -142,7 +154,7 @@ describe('DlDateTimePickerComponent startView=minute', () => {
     it('should contain 12 .minute elements with start of minute utc time as class and role of gridcell', () => {
       const expectedClass = new Array(12)
         .fill(0)
-        .map((value, index) => new Date(2018, JAN , 26, 15, 5 * index).getTime());
+        .map((value, index) => new Date(2018, JAN, 26, 15, 5 * index).getTime());
 
       const minuteElements = fixture.debugElement.queryAll(By.css('.minute'));
       expect(minuteElements.length).toBe(12);

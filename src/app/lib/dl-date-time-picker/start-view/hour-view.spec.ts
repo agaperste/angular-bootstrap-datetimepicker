@@ -5,10 +5,24 @@ import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import * as moment from 'moment';
 import {
-  dispatchKeyboardEvent, DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE,
+  dispatchKeyboardEvent,
+  DOWN_ARROW,
+  END,
+  ENTER,
+  HOME,
+  LEFT_ARROW,
+  PAGE_DOWN,
+  PAGE_UP,
+  RIGHT_ARROW,
+  SPACE,
   UP_ARROW
 } from '../../../../testing/dispatch-events';
 import {JAN} from '../../../../testing/month-constants';
+import {DlYearModelComponent} from '../dl-year-model.component';
+import {DlMinuteModelComponent} from '../dl-minute-model.component';
+import {DlMonthModelComponent} from '../dl-month-model.component';
+import {DlDayModelComponent} from '../dl-day-model.component';
+import {DlHourModelComponent} from '../dl-hour-model.component';
 
 @Component({
 
@@ -37,6 +51,13 @@ describe('DlDateTimePickerComponent startView=hour', () => {
         DlDateTimePickerComponent,
         HourStartViewComponent,
         HourStartViewWithNgModelComponent,
+      ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
       ]
     })
       .compileComponents();
@@ -60,18 +81,18 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     }));
 
     it('should start with hour-view', () => {
-      const  hourView = fixture.debugElement.query(By.css('.hour-view'));
-      expect( hourView).toBeTruthy();
+      const hourView = fixture.debugElement.query(By.css('.hour-view'));
+      expect(hourView).toBeTruthy();
     });
 
     it('should contain 0 .col-label elements', () => {
-      const  labelElements = fixture.debugElement.queryAll(By.css('.col-label'));
+      const labelElements = fixture.debugElement.queryAll(By.css('.col-label'));
       expect(labelElements.length).toBe(0);
     });
 
     it('should contain 24 .hour elements', () => {
-      const  hourElements = fixture.debugElement.queryAll(By.css('.hour'));
-      expect( hourElements.length).toBe(24);
+      const hourElements = fixture.debugElement.queryAll(By.css('.hour'));
+      expect(hourElements.length).toBe(24);
     });
 
     it('should contain 1 .today element for the current hour', () => {
@@ -115,7 +136,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
 
       const expectedClass = new Array(24)
         .fill(0)
-        .map((value, index) => new Date(2018, JAN , 26,  index).getTime());
+        .map((value, index) => new Date(2018, JAN, 26, index).getTime());
 
       const hourElements = fixture.debugElement.queryAll(By.css('.hour'));
       expect(hourElements.length).toBe(24);
@@ -274,7 +295,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     });
 
     it('should change to previous day when first .hour is .active element and pressing on left arrow', () => {
-      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26 ).getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', LEFT_ARROW); // 2019
@@ -300,7 +321,7 @@ describe('DlDateTimePickerComponent startView=hour', () => {
     });
 
     it('should change to previous day when first .hour is .active element and pressing on up arrow', () => {
-      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26 ).getTime();
+      (component.picker as any)._model.activeDate = new Date(2018, JAN, 26).getTime();
       fixture.detectChanges();
 
       dispatchKeyboardEvent(fixture.debugElement.query(By.css('.active')).nativeElement, 'keydown', UP_ARROW); // 2019

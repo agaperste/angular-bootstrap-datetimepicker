@@ -18,6 +18,11 @@ import {
 } from '../../../../testing/dispatch-events';
 import * as moment from 'moment';
 import {DEC, JAN} from '../../../../testing/month-constants';
+import {DlYearModelComponent} from '../dl-year-model.component';
+import {DlMonthModelComponent} from '../dl-month-model.component';
+import {DlHourModelComponent} from '../dl-hour-model.component';
+import {DlDayModelComponent} from '../dl-day-model.component';
+import {DlMinuteModelComponent} from '../dl-minute-model.component';
 
 @Component({
 
@@ -52,7 +57,15 @@ describe('DlDateTimePickerComponent', () => {
         DlDateTimePickerComponent,
         YearStartViewComponent,
         YearStartViewWithNgModelComponent,
-        YearSelectorComponent]
+        YearSelectorComponent
+      ],
+      providers: [
+        DlYearModelComponent,
+        DlMonthModelComponent,
+        DlDayModelComponent,
+        DlHourModelComponent,
+        DlMinuteModelComponent
+      ]
     })
       .compileComponents();
   }));
