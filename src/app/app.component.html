@@ -15,9 +15,11 @@
     <small class="form-text text-muted">Determines the initial view for the calendar.</small>
   </div>
 
-  <div>
+  <div class="dtp-wrapper card">
     <dl-date-time-picker class="en" [startView]="startView" [(ngModel)]="selectedDate"></dl-date-time-picker>
   </div>
+
+  <p>&nbsp;</p>
 
   <div>
     Selected Date: {{selectedDate}}

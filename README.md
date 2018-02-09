@@ -22,6 +22,9 @@ Native Angular (4+) datetime picker directive styled by Twitter Bootstrap
 ## Support the project
 I know this is a tiny directive but many people use it in production (high 5 to all of us) - if you happen to use this directive please click the star button (at the top of the page) - it means a lot to all the contributors.
 
+## Befire 
+Before submitting new issues, have a look at [issues marked with the `type: faq` label](https://github.com/dalelotts/angular-bootstrap-datetimepicker/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3A%22type%3A%20faq%22%20).
+
 ## Usage with Angular CLI
 We use npm for dependency management, run
 

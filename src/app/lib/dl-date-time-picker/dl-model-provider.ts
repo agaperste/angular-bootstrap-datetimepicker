@@ -1,6 +1,6 @@
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
 
-export interface ModelProvider {
+export interface DlModelProvider {
 
   getModel(milliseconds: number): DlDateTimePickerModel;
 

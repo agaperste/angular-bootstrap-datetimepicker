@@ -3,12 +3,12 @@ import * as moment from 'moment';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
-import {ModelProvider} from './model-provider';
-import {YearModelProvider} from './year-model-provider';
-import {MonthModelProvider} from './month-model-provider';
-import {DayModelProvider} from './day-model-provider';
-import {HourModelProvider} from './hour-model-provider';
-import {MinuteModelProvider} from './minute-model-provider';
+import {DlModelProvider} from './dl-model-provider';
+import {DlYearModelProvider} from './dl-year-model-provider';
+import {DlMonthModelProvider} from './dl-month-model-provider';
+import {DlDayModelProvider} from './dl-day-model-provider';
+import {DlHourModelProvider} from './dl-hour-model-provider';
+import {DlMinuteModelProvider} from './dl-minute-model-provider';
 
 const DOWN_ARROW = 40;
 const END = 35;
@@ -45,11 +45,11 @@ export class DlDateTimePickerChange {
       useExisting: DlDateTimePickerComponent,
       multi: true
     },
-    YearModelProvider,
-    MonthModelProvider,
-    DayModelProvider,
-    HourModelProvider,
-    MinuteModelProvider
+    DlYearModelProvider,
+    DlMonthModelProvider,
+    DlDayModelProvider,
+    DlHourModelProvider,
+    DlMinuteModelProvider
   ],
   selector: 'dl-date-time-picker',
   styleUrls: ['./dl-date-time-picker.component.css'],
@@ -90,19 +90,25 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   readonly change = new EventEmitter<DlDateTimePickerChange>();
 
 
+  /** @internal */
   private _changed: ((value: number) => void)[] = [];
+  /** @internal */
   private _model: DlDateTimePickerModel;
+  /** @internal */
   private _touched: (() => void)[] = [];
+  /** @internal */
   private _value: number;
 
+  /** @internal */
   private _viewToFactory: {
-    year: ModelProvider;
-    month: ModelProvider;
-    day: ModelProvider;
-    hour: ModelProvider;
-    minute: ModelProvider;
+    year: DlModelProvider;
+    month: DlModelProvider;
+    day: DlModelProvider;
+    hour: DlModelProvider;
+    minute: DlModelProvider;
   };
 
+  /** @internal */
   private _nextView = {
     'year': 'month',
     'month': 'day',
@@ -110,6 +116,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     'hour': 'minute'
   };
 
+  /** @internal */
   private _previousView = {
     'minute': 'hour',
     'hour': 'day',
@@ -119,11 +126,11 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   constructor(private _elementRef: ElementRef,
               private _ngZone: NgZone,
-              private yearModelProvider: YearModelProvider,
-              private monthModelProvider: MonthModelProvider,
-              private dayModelProvider: DayModelProvider,
-              private hourModelProvider: HourModelProvider,
-              private minuteModelProvider: MinuteModelProvider) {
+              private yearModelProvider: DlYearModelProvider,
+              private monthModelProvider: DlMonthModelProvider,
+              private dayModelProvider: DlDayModelProvider,
+              private hourModelProvider: DlHourModelProvider,
+              private minuteModelProvider: DlMinuteModelProvider) {
 
     this._viewToFactory = {
       year: yearModelProvider,
@@ -138,11 +145,13 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     this._model = this._viewToFactory[this._getStartView()].getModel(moment().valueOf());
   }
 
+  /** @internal */
   private _getStartView(): string {
     const startIndex = Math.max(VIEWS.indexOf(this.minView || 'minute'), VIEWS.indexOf(this.startView || 'day'));
     return VIEWS[startIndex];
   }
 
+  /** @internal */
   _onDateClick(milliseconds: number) {
 
     let nextView = this._nextView[this._model.view];
@@ -157,15 +166,18 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     this._onTouch();
   }
 
+  /** @internal */
   _onLeftClick() {
     this._model = this._viewToFactory[this._model.view].getModel(this._model.leftButton.value);
     this._onTouch();
   }
 
+  /** @internal */
   _onUpClick() {
     this._model = this._viewToFactory[this._previousView[this._model.view]].getModel(this._model.upButton.value);
   }
 
+  /** @internal */
   _onRightClick() {
     this._model = this._viewToFactory[this._model.view].getModel(this._model.rightButton.value);
     this._onTouch();
@@ -196,14 +208,17 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     this._touched.push(fn);
   }
 
+  /** @internal */
   private _onTouch() {
     this._touched.forEach((onTouch) => onTouch());
   }
 
+  /** @internal */
   _isActiveCell(value: number) {
     return this._model.activeDate === value;
   }
 
+  /** @internal */
   _handleKeyDown($event: KeyboardEvent): void {
     const currentViewFactory = this._viewToFactory[this._model.view];
     switch ($event.keyCode) {
@@ -247,7 +262,10 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     event.preventDefault();
   }
 
-  /** Focuses the active cell after the microtask queue is empty. */
+  /**
+   * @internal
+   * Focuses the active cell after the microtask queue is empty.
+   **/
   private _focusActiveCell() {
     this._ngZone.runOutsideAngular(() => {
       this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
@@ -257,6 +275,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 }
 
+/** @internal */
 function hasValue(value: any): boolean {
   return (typeof value !== 'undefined') && (value !== null);
 }

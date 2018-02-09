@@ -1,4 +1,4 @@
-import {ModelProvider} from './model-provider';
+import {DlModelProvider} from './dl-model-provider';
 import * as moment from 'moment';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
 import {NgModule} from '@angular/core';
@@ -6,12 +6,12 @@ import {NgModule} from '@angular/core';
 @NgModule({
   providers: [
     {
-      provide: MinuteModelProvider,
-      useClass: MinuteModelProvider,
+      provide: DlMinuteModelProvider,
+      useClass: DlMinuteModelProvider,
     },
   ],
 })
-export class MinuteModelProvider implements ModelProvider {
+export class DlMinuteModelProvider implements DlModelProvider {
 
   private step = 5;
 

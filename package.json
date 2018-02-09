@@ -10,6 +10,7 @@
   "scripts": {
     "build": "ng build",
     "build:lib": "ng-packagr -p ng-package.json",
+    "document": "compodoc --disableInternal --disablePrivate --disableLifeCycleHooks -p src/tsconfig.app.json",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",
@@ -80,5 +81,8 @@
     "tslint": "^5.9.1",
     "typescript": "^2.6.2",
     "zone.js": "^0.8.20"
+  },
+  "dependencies": {
+    "@compodoc/compodoc": "^1.0.5"
   }
 }
