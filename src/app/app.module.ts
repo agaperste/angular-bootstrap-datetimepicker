@@ -4,20 +4,20 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { DlDateTimePickerComponent } from './lib/dl-date-time-picker';
+import { DlDateTimePickerModule } from './lib/dl-date-time-picker';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    DlDateTimePickerComponent
+    AppComponent
   ],
   imports: [
+    DlDateTimePickerModule,
     BrowserModule,
     FormsModule
   ],
   providers: [FormsModule],
   bootstrap: [AppComponent],
-  exports: [DlDateTimePickerComponent]
+  exports: [DlDateTimePickerModule]
 })
 export class AppModule { }

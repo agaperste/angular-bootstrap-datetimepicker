@@ -6,4 +6,4 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-export * from './dl-date-time-picker.component';
+export * from './dl-date-time-picker.module';
