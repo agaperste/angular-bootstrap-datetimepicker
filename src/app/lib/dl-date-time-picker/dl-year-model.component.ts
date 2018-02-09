@@ -4,15 +4,15 @@ import * as moment from 'moment';
 import {Moment} from 'moment';
 import {Component, NgModule} from '@angular/core';
 
-@NgModule({
+@Component({
   providers: [
     {
-      provide: DlYearModelProvider,
-      useClass: DlYearModelProvider,
+      provide: DlYearModelComponent,
+      useClass: DlYearModelComponent,
     },
   ],
 })
-export class DlYearModelProvider implements DlModelProvider {
+export class DlYearModelComponent implements DlModelProvider {
 
   private static getStartOfDecade(milliseconds: number): Moment {
     // Truncate the last digit from the current year to get the start of the decade
@@ -25,7 +25,7 @@ export class DlYearModelProvider implements DlModelProvider {
     const columnNumbers = [0, 1, 2, 3, 4];
 
     const startYear = moment(milliseconds).startOf('year');
-    const startDate = DlYearModelProvider.getStartOfDecade(milliseconds);
+    const startDate = DlYearModelComponent.getStartOfDecade(milliseconds);
 
     const futureYear = startDate.year() + 9;
     const pastYear = startDate.year();
@@ -94,10 +94,10 @@ export class DlYearModelProvider implements DlModelProvider {
   }
 
   goEnd(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(DlYearModelProvider.getStartOfDecade(fromMilliseconds).add(9, 'years').endOf('year').valueOf());
+    return this.getModel(DlYearModelComponent.getStartOfDecade(fromMilliseconds).add(9, 'years').endOf('year').valueOf());
   }
 
   goHome(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(DlYearModelProvider.getStartOfDecade(fromMilliseconds).startOf('year').valueOf());
+    return this.getModel(DlYearModelComponent.getStartOfDecade(fromMilliseconds).startOf('year').valueOf());
   }
 }

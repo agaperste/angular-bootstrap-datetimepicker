@@ -4,12 +4,11 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
 import {DlModelProvider} from './dl-model-provider';
-import {DlYearModelProvider} from './dl-year-model-provider';
-import {DlMonthModelProvider} from './dl-month-model-provider';
-import {DlDayModelProvider} from './dl-day-model-provider';
-import {DlHourModelProvider} from './dl-hour-model-provider';
-import {DlMinuteModelProvider} from './dl-minute-model-provider';
-import {CommonModule} from '@angular/common';
+import {DlYearModelComponent} from './dl-year-model.component';
+import {DlMonthModelComponent} from './dl-month-model.component';
+import {DlDayModelComponent} from './dl-day-model.component';
+import {DlHourModelComponent} from './dl-hour-model.component';
+import {DlMinuteModelComponent} from './dl-minute-model.component';
 
 const DOWN_ARROW = 40;
 const END = 35;
@@ -46,11 +45,11 @@ export class DlDateTimePickerChange {
       useExisting: DlDateTimePickerComponent,
       multi: true
     },
-    DlYearModelProvider,
-    DlMonthModelProvider,
-    DlDayModelProvider,
-    DlHourModelProvider,
-    DlMinuteModelProvider
+    DlYearModelComponent,
+    DlMonthModelComponent,
+    DlDayModelComponent,
+    DlHourModelComponent,
+    DlMinuteModelComponent
   ],
   selector: 'dl-date-time-picker',
   styleUrls: ['./dl-date-time-picker.component.css'],
@@ -127,18 +126,18 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   constructor(private _elementRef: ElementRef,
               private _ngZone: NgZone,
-              private yearModelProvider: DlYearModelProvider,
-              private monthModelProvider: DlMonthModelProvider,
-              private dayModelProvider: DlDayModelProvider,
-              private hourModelProvider: DlHourModelProvider,
-              private minuteModelProvider: DlMinuteModelProvider) {
+              private yearModelComponent: DlYearModelComponent,
+              private monthModelComponent: DlMonthModelComponent,
+              private dayModelComponent: DlDayModelComponent,
+              private hourModelComponent: DlHourModelComponent,
+              private minuteModelComponent: DlMinuteModelComponent) {
 
     this._viewToFactory = {
-      year: yearModelProvider,
-      month: monthModelProvider,
-      day: dayModelProvider,
-      hour: hourModelProvider,
-      minute: minuteModelProvider,
+      year: yearModelComponent,
+      month: monthModelComponent,
+      day: dayModelComponent,
+      hour: hourModelComponent,
+      minute: minuteModelComponent,
     };
   }
 

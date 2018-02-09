@@ -1,17 +1,18 @@
 import {DlModelProvider} from './dl-model-provider';
 import * as moment from 'moment';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
-import {NgModule} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
+import {DlYearModelComponent} from './dl-year-model.component';
 
-@NgModule({
+@Component({
   providers: [
     {
-      provide: DlHourModelProvider,
-      useClass: DlHourModelProvider,
+      provide: DlHourModelComponent,
+      useClass: DlHourModelComponent,
     },
   ],
 })
-export class DlHourModelProvider implements DlModelProvider {
+export class DlHourModelComponent implements DlModelProvider {
 
   getModel(milliseconds: number): DlDateTimePickerModel {
     const startDate = moment(milliseconds).startOf('day');
