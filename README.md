@@ -1,6 +1,6 @@
-# Angular 4+ bootstrap date & time picker
+# Angular 5+ bootstrap date & time picker
 
-Native Angular (4+) datetime picker directive styled by Twitter Bootstrap
+Native Angular (5+) datetime picker directive styled by Twitter Bootstrap 4.
 
 [![Join the chat at https://gitter.im/dalelotts/angular-bootstrap-datetimepicker](https://badges.gitter.im/dalelotts/angular-bootstrap-datetimepicker.svg)](https://gitter.im/dalelotts/angular-bootstrap-datetimepicker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![MIT License][license-image]][license-url]
@@ -77,7 +77,27 @@ If for some reason the default Moment settings will not work, you can [customize
 
 ## Internationalization (i18n) and Localization (l10n)
 
-## Using with a screen reader
+
+## Accessibility
+
+The `DlDateTimePickerComponent` component adds `aria-label` attributes to the left, right, and up buttons
+in addition to all calendar cells where the text of the cell may not fully describe the value.
+
+### Keyboard shortcuts
+
+The `DlDateTimePickerComponent` component supports the following keyboard shortcuts in all views:
+
+| Shortcut             | Action                                          |
+|----------------------|-------------------------------------------------|
+| `LEFT_ARROW`         | Go to the cell to the left                      |
+| `RIGHT_ARROW`        | Go to the cell to the right                     |
+| `UP_ARROW`           | Go to the cell above                            |
+| `DOWN_ARROW`         | Go to the cell below                            |
+| `HOME`               | Go to the first cell in the view                |
+| `END`                | Go to the last cell in the view                 |
+| `PAGE_UP`            | Go to the same cell in the previous time period |
+| `PAGE_DOWN`          | Go to the same cell in the next time period     |
+| `ENTER` or `SPACE`   | Select current cell                             |
 
 ## Examples
 

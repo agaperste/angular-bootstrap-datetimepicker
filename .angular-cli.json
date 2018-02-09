@@ -51,7 +51,7 @@
   "test": {
     "codeCoverage": {
       "exclude": [
-        "**/testing/**"
+        "**/specs/**"
       ]
     },
     "karma": {

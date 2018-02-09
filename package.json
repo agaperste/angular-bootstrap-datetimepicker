@@ -10,7 +10,7 @@
   "scripts": {
     "build": "ng build",
     "build:lib": "ng-packagr -p ng-package.json",
-    "document": "compodoc --disableInternal --disablePrivate --disableLifeCycleHooks --assetsFolder screenshots -p src/tsconfig.doc.json",
+    "document": "compodoc --disableInternal --disablePrivate --disableLifeCycleHooks --assetsFolder screenshots -p src/tsconfig.doc.json -n \"Angular Bootstrap Date/Time Picker\"",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",

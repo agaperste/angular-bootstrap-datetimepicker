@@ -9,6 +9,7 @@ import {DlMonthModelComponent} from './dl-month-model.component';
 import {DlDayModelComponent} from './dl-day-model.component';
 import {DlHourModelComponent} from './dl-hour-model.component';
 import {DlMinuteModelComponent} from './dl-minute-model.component';
+import {DlDateTimePickerChange} from './dl-date-time-picker-change';
 
 /** @internal */
 const moment = momentNs;
@@ -41,14 +42,6 @@ const VIEWS = [
   'year'
 ];
 
-export class DlDateTimePickerChange {
-  utc: number;
-
-  constructor(milliseconds: number) {
-    this.utc = milliseconds;
-  }
-}
-
 /**
  * Component that provides all of the user facing functionality of the date/time picker.
  */
@@ -69,37 +62,81 @@ export class DlDateTimePickerChange {
 })
 export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
+  /**
+   * The highest view that the date/time picker can show.
+   * Setting this to a view less than year could make it more
+   * difficult for the end-user to navigate to certain dates.
+   */
   @Input()
-  maxView: 'year' | 'month' | 'day' | 'hour' | 'minute';
+  maxView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'year';
 
+  /**
+   * The initial view that the date/time picker will show.
+   * The picker will also return to this view after a date/time
+   * is selected.
+   *
+   * NOTE: This must be set lower than or equal to `maxView'
+   */
   @Input()
   startView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'day';
 
+  /**
+   * The view that will be used for date/time selection.
+   *
+   * The default of `minute  means that selection will not happen
+   * until the end-user clicks on a cell in the minute view.
+   *
+   * for example, if you want the end-user to select a only day (date),
+   * setting `minView` to `day` will cause selection to happen when the
+   * end-user selects a cell in the day view.
+   *
+   * NOTE: This must be set lower than or equal to `startView'
+   */
   @Input()
   minView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'minute';
 
+  /**
+   * Specifies the classes used to display the left icon.
+   *
+   * This component uses OPENICONIC https://useiconic.com/open
+   * by default but any icon library may be used.
+   */
   @Input()
   leftIconClass: string | string[] | Set<string> | {} = [
     'oi',
     'oi-chevron-left'
   ];
 
+  /**
+   * Specifies the classes used to display the up icon.
+   *
+   * This component uses OPENICONIC https://useiconic.com/open
+   * by default but any icon library may be used.
+   */
   @Input()
   upIconClass = [
     'oi',
     'oi-chevron-top'
   ];
 
+  /**
+   * Specifies the classes used to display the right icon.
+   *
+   * This component uses OPENICONIC https://useiconic.com/open
+   * by default but any icon library may be used.
+   */
   @Input()
   rightIconClass = [
     'oi',
     'oi-chevron-right'
   ];
 
-  /** Emits when a `change` event is fired on this date/time picker. */
+  /**
+   * Emits when a `change` event when date/time is selected or
+   * the value of the date/time picker changes.
+   **/
   @Output()
   readonly change = new EventEmitter<DlDateTimePickerChange>();
-
 
   /** @internal */
   private _changed: ((value: number) => void)[] = [];
@@ -130,6 +167,24 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
     'month': 'year'
   };
 
+  /**
+   * Used to construct a new instance of a date/time picker.
+   *
+   * @param _elementRef
+   *  reference to this element.
+   * @param _ngZone
+   *  reference to an NgZone instance used to select the active element outside of angular.
+   * @param yearModelComponent
+   *  provider for the year view model.
+   * @param monthModelComponent
+   *  provider for the month view model.
+   * @param dayModelComponent
+   *  provider for the day view model.
+   * @param hourModelComponent
+   *  provider for the hour view model.
+   * @param minuteModelComponent
+   *  provider for the minute view model.
+   */
   constructor(private _elementRef: ElementRef,
               private _ngZone: NgZone,
               private yearModelComponent: DlYearModelComponent,
@@ -150,19 +205,27 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   /** @internal */
   private _value: number;
 
+  /**
+   * Returns value of the date/time picker or undefined/null if no value is set.
+   **/
   get value() {
     return this._value;
   }
 
+  /**
+   * Sets value of the date/time picker and emits a change event if the
+   * new value is different from the previous value.
+   **/
   set value(value: number) {
     if (this._value !== value) {
       this._value = value;
-      this._model = this._viewToFactory[this._model.view].getModel(hasValue(this._value) ? this._value : moment().valueOf());
+      this._model = this._viewToFactory[this._model.viewName].getModel(hasValue(this._value) ? this._value : moment().valueOf());
       this._changed.forEach(f => f(value));
       this.change.emit(new DlDateTimePickerChange(value));
     }
   }
 
+  /** @internal */
   ngOnInit(): void {
     this._model = this._viewToFactory[this._getStartView()].getModel(moment().valueOf());
   }
@@ -170,9 +233,9 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   /** @internal */
   _onDateClick(milliseconds: number) {
 
-    let nextView = this._nextView[this._model.view];
+    let nextView = this._nextView[this._model.viewName];
 
-    if ((this.minView || 'minute') === this._model.view) {
+    if ((this.minView || 'minute') === this._model.viewName) {
       this.value = milliseconds;
       nextView = this.startView;
     }
@@ -184,29 +247,32 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /** @internal */
   _onLeftClick() {
-    this._model = this._viewToFactory[this._model.view].getModel(this._model.leftButton.value);
+    this._model = this._viewToFactory[this._model.viewName].getModel(this._model.leftButton.value);
     this._onTouch();
   }
 
   /** @internal */
   _onUpClick() {
-    this._model = this._viewToFactory[this._previousView[this._model.view]].getModel(this._model.upButton.value);
+    this._model = this._viewToFactory[this._previousView[this._model.viewName]].getModel(this._model.upButton.value);
   }
 
   /** @internal */
   _onRightClick() {
-    this._model = this._viewToFactory[this._model.view].getModel(this._model.rightButton.value);
+    this._model = this._viewToFactory[this._model.viewName].getModel(this._model.rightButton.value);
     this._onTouch();
   }
 
+  /** @internal */
   writeValue(value: number) {
     this.value = value;
   }
 
+  /** @internal */
   registerOnChange(fn: (value: number) => void) {
     this._changed.push(fn);
   }
 
+  /** @internal */
   registerOnTouched(fn: () => void) {
     this._touched.push(fn);
   }
@@ -218,7 +284,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /** @internal */
   _handleKeyDown($event: KeyboardEvent): void {
-    const currentViewFactory = this._viewToFactory[this._model.view];
+    const currentViewFactory = this._viewToFactory[this._model.viewName];
     switch ($event.keyCode) {
       case SPACE:
       case ENTER:

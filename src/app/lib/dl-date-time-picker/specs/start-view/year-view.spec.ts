@@ -1,4 +1,4 @@
-import {DlDateTimePickerComponent} from '../dl-date-time-picker.component';
+import {DlDateTimePickerComponent} from '../../dl-date-time-picker.component';
 import {Component, DebugElement, ViewChild} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
@@ -15,14 +15,14 @@ import {
   RIGHT_ARROW,
   SPACE,
   UP_ARROW
-} from '../../../../testing/dispatch-events';
+} from '../dispatch-events';
 import * as moment from 'moment';
-import {DEC, JAN} from '../../../../testing/month-constants';
-import {DlYearModelComponent} from '../dl-year-model.component';
-import {DlMonthModelComponent} from '../dl-month-model.component';
-import {DlHourModelComponent} from '../dl-hour-model.component';
-import {DlDayModelComponent} from '../dl-day-model.component';
-import {DlMinuteModelComponent} from '../dl-minute-model.component';
+import {DEC, JAN} from '../month-constants';
+import {DlYearModelComponent} from '../../dl-year-model.component';
+import {DlMonthModelComponent} from '../../dl-month-model.component';
+import {DlHourModelComponent} from '../../dl-hour-model.component';
+import {DlDayModelComponent} from '../../dl-day-model.component';
+import {DlMinuteModelComponent} from '../../dl-minute-model.component';
 
 @Component({
 
@@ -451,7 +451,7 @@ describe('DlDateTimePickerComponent', () => {
       const expectedTime = new Date(startDecade, JAN, 1).getTime();
       expect(component.picker.value).toBe(expectedTime);
       expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(expectedTime);
+      expect(changeSpy.calls.first().args[0].value).toBe(expectedTime);
     });
   });
 });

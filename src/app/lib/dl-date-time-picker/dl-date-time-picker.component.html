@@ -1,4 +1,4 @@
-<div class="text-center {{_model.view}}-view ">
+<div class="text-center {{_model.viewName}}-view ">
   <div class="row align-items-center no-gutters">
     <button class="col left-button align-items-center"
             type="button"
@@ -9,7 +9,7 @@
       <span class="left-icon" [ngClass]="leftIconClass"></span>
     </button>
 
-    <div *ngIf="_model.view === (this.maxView || 'year'); then maxViewLabel else defaultViewLabel;"></div>
+    <div *ngIf="_model.viewName === (this.maxView || 'year'); then maxViewLabel else defaultViewLabel;"></div>
 
     <button class="col right-button"
             type="button"
@@ -27,7 +27,7 @@
     <div *ngFor="let row of _model.rows" class="row align-items-center no-gutters">
       <div *ngFor="let cell of row.cells"
            role="gridcell"
-           class="col date-button {{_model.view}} {{cell.value}}"
+           class="col date-button {{_model.viewName}} {{cell.value}}"
            [class.active]="_isActiveCell(cell.value)"
            [ngClass]="cell.classes"
            [attr.aria-label]="cell.ariaLabel"

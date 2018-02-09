@@ -1,13 +1,13 @@
-import {DlDateTimePickerComponent} from '../dl-date-time-picker.component';
+import {DlDateTimePickerComponent} from '../../dl-date-time-picker.component';
 import {Component, DebugElement, ViewChild} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {DlYearModelComponent} from '../dl-year-model.component';
-import {DlMinuteModelComponent} from '../dl-minute-model.component';
-import {DlMonthModelComponent} from '../dl-month-model.component';
-import {DlDayModelComponent} from '../dl-day-model.component';
-import {DlHourModelComponent} from '../dl-hour-model.component';
+import {DlYearModelComponent} from '../../dl-year-model.component';
+import {DlMinuteModelComponent} from '../../dl-minute-model.component';
+import {DlMonthModelComponent} from '../../dl-month-model.component';
+import {DlDayModelComponent} from '../../dl-day-model.component';
+import {DlHourModelComponent} from '../../dl-hour-model.component';
 
 @Component({
   template: '<dl-date-time-picker minView="year" [(ngModel)]="selectedDate"></dl-date-time-picker>'

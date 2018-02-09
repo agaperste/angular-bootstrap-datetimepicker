@@ -10,7 +10,7 @@
     "**/*.spec.ts",
     "**/app.*",
     "**/environments/*",
-    "**/testing/*",
+    "**/specs/*",
     "test.ts"
   ]
 }

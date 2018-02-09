@@ -1,15 +1,15 @@
-import {DlDateTimePickerComponent} from '../dl-date-time-picker.component';
+import {DlDateTimePickerComponent} from '../../dl-date-time-picker.component';
 import {Component, DebugElement, ViewChild} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {dispatchKeyboardEvent, ENTER, SPACE} from '../../../../testing/dispatch-events';
-import {JAN} from '../../../../testing/month-constants';
-import {DlYearModelComponent} from '../dl-year-model.component';
-import {DlMinuteModelComponent} from '../dl-minute-model.component';
-import {DlMonthModelComponent} from '../dl-month-model.component';
-import {DlDayModelComponent} from '../dl-day-model.component';
-import {DlHourModelComponent} from '../dl-hour-model.component';
+import {dispatchKeyboardEvent, ENTER, SPACE} from '../dispatch-events';
+import {JAN} from '../month-constants';
+import {DlYearModelComponent} from '../../dl-year-model.component';
+import {DlMinuteModelComponent} from '../../dl-minute-model.component';
+import {DlMonthModelComponent} from '../../dl-month-model.component';
+import {DlDayModelComponent} from '../../dl-day-model.component';
+import {DlHourModelComponent} from '../../dl-hour-model.component';
 
 @Component({
   template: '<dl-date-time-picker [(ngModel)]="selectedDate" startView="year" minView="year"></dl-date-time-picker>'
@@ -121,7 +121,7 @@ describe('DlDateTimePickerComponent', () => {
       const expected = new Date(2018, JAN, 1).getTime();
       expect(component.picker.value).toBe(expected);
       expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(expected);
+      expect(changeSpy.calls.first().args[0].value).toBe(expected);
     });
 
     it('should store the value in ngModel when hitting ENTER', () => {
@@ -138,7 +138,7 @@ describe('DlDateTimePickerComponent', () => {
 
       expect(component.picker.value).toBe(1293840000000);
       expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(1293840000000);
+      expect(changeSpy.calls.first().args[0].value).toBe(1293840000000);
       expect(component.selectedDate).toBe(1293840000000);
     });
 
@@ -156,7 +156,7 @@ describe('DlDateTimePickerComponent', () => {
 
       expect(component.picker.value).toBe(1293840000000);
       expect(changeSpy).toHaveBeenCalled();
-      expect(changeSpy.calls.first().args[0].utc).toBe(1293840000000);
+      expect(changeSpy.calls.first().args[0].value).toBe(1293840000000);
       expect(component.selectedDate).toBe(1293840000000);
     });
 
@@ -172,7 +172,7 @@ describe('DlDateTimePickerComponent', () => {
 
       expect(component.picker.value).toBe(1293840000000);
       expect(changeSpy).toHaveBeenCalledTimes(1);
-      expect(changeSpy.calls.first().args[0].utc).toBe(1293840000000);
+      expect(changeSpy.calls.first().args[0].value).toBe(1293840000000);
       expect(component.selectedDate).toBe(1293840000000);
     });
   });
