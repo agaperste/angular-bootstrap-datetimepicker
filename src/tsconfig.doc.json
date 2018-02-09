@@ -9,6 +9,8 @@
   "exclude": [
     "**/*.spec.ts",
     "**/app.*",
+    "**/environments/*",
+    "**/testing/*",
     "test.ts"
   ]
 }

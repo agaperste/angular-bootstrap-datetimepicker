@@ -53,10 +53,6 @@ minutes are displayed using 'lll' as the format.
 I recommend you use the default locale settings from Moment (if they are incorrect, submit a PR to moment to correct the settings)
 If for some reason the default Moment settings will not work, you can [customize the existing locale](https://momentjs.com/docs/#/customization/) or [create a custom locale](https://momentjs.com/docs/#/i18n/adding-locale/) with the desired formats.
 
-### Overriding html template
-
-### Formatting the date in an input box
-
 ### Inputs
 
 #### maxView
@@ -74,6 +70,10 @@ If for some reason the default Moment settings will not work, you can [customize
 ### Outputs
 
 #### change
+
+### Overriding html template
+
+### Formatting the date in an input box
 
 ## Internationalization (i18n) and Localization (l10n)
 

@@ -1,8 +1,11 @@
 import {DlModelProvider} from './dl-model-provider';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
-import * as moment from 'moment';
+import * as momentNs from 'moment';
 import {Moment} from 'moment';
-import {Component, NgModule} from '@angular/core';
+import {Component} from '@angular/core';
+
+/** @internal */
+const moment = momentNs;
 
 @Component({
   providers: [

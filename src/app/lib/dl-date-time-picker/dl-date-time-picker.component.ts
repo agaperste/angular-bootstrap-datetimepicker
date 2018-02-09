@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/core';
-import * as moment from 'moment';
+import * as momentNs from 'moment';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {DlDateTimePickerModel} from './dl-date-time-picker-model';
@@ -10,16 +10,29 @@ import {DlDayModelComponent} from './dl-day-model.component';
 import {DlHourModelComponent} from './dl-hour-model.component';
 import {DlMinuteModelComponent} from './dl-minute-model.component';
 
+/** @internal */
+const moment = momentNs;
+/** @internal */
 const DOWN_ARROW = 40;
+/** @internal */
 const END = 35;
+/** @internal */
 const ENTER = 13;
+/** @internal */
 const HOME = 36;
+/** @internal */
 const LEFT_ARROW = 37;
+/** @internal */
 const PAGE_DOWN = 34;
+/** @internal */
 const PAGE_UP = 33;
+/** @internal */
 const RIGHT_ARROW = 39;
+/** @internal */
 const SPACE = 32;
+/** @internal */
 const UP_ARROW = 38;
+/** @internal */
 const VIEWS = [
   'minute',
   'hour',
