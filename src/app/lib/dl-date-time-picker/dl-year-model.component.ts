@@ -62,11 +62,12 @@ export class DlYearModelComponent implements DlModelProvider {
 
     const futureYear = startDate.year() + 9;
     const pastYear = startDate.year();
+    const activeValue = startYear.valueOf();
 
     const result: DlDateTimePickerModel = {
       viewName: 'year',
       viewLabel: `${pastYear}-${futureYear}`,
-      activeDate: startYear.valueOf(),
+      activeDate: activeValue,
       leftButton: {
         value: moment(startDate).subtract(10, 'years').valueOf(),
         ariaLabel: `Go to ${pastYear - 10}-${pastYear - 1}`,
@@ -94,6 +95,7 @@ export class DlYearModelComponent implements DlModelProvider {
           display: yearMoment.format('YYYY'),
           value: yearMoment.valueOf(),
           classes: {
+            active: activeValue === yearMoment.valueOf(),
             today: yearMoment.isSame(currentMoment, 'year'),
           }
         };

@@ -278,11 +278,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   /** @internal */
-  _isActiveCell(value: number) {
-    return this._model.activeDate === value;
-  }
-
-  /** @internal */
   _handleKeyDown($event: KeyboardEvent): void {
     const currentViewFactory = this._viewToFactory[this._model.viewName];
     switch ($event.keyCode) {

@@ -44,11 +44,12 @@ export class DlMonthModelComponent implements DlModelProvider {
 
     const previousYear = moment(startDate).subtract(1, 'year');
     const nextYear = moment(startDate).add(1, 'year');
+    const activeValue = moment(milliseconds).startOf('month').valueOf();
 
     const result = {
       viewName: 'month',
       viewLabel: startDate.format('YYYY'),
-      activeDate: moment(milliseconds).startOf('month').valueOf(),
+      activeDate: activeValue,
       leftButton: {
         value: previousYear.valueOf(),
         ariaLabel: `Go to ${previousYear.format('YYYY')}`,
@@ -82,6 +83,7 @@ export class DlMonthModelComponent implements DlModelProvider {
           ariaLabel: monthMoment.format('MMM YYYY'),
           value: monthMoment.valueOf(),
           classes: {
+            active: activeValue === monthMoment.valueOf(),
             today: monthMoment.isSame(currentMoment, 'month'),
           }
         };

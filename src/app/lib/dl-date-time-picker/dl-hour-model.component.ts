@@ -43,11 +43,12 @@ export class DlHourModelComponent implements DlModelProvider {
 
     const previousDay = moment(startDate).subtract(1, 'day');
     const nextDay = moment(startDate).add(1, 'day');
+    const activeValue = moment(milliseconds).startOf('hour').valueOf();
 
     const result: DlDateTimePickerModel = {
       viewName: 'hour',
       viewLabel: startDate.format('ll'),
-      activeDate: moment(milliseconds).startOf('hour').valueOf(),
+      activeDate: activeValue,
       leftButton: {
         value: previousDay.valueOf(),
         ariaLabel: `Go to ${previousDay.format('ll')}`,
@@ -81,6 +82,7 @@ export class DlHourModelComponent implements DlModelProvider {
           ariaLabel: hourMoment.format('LLL'),
           value: hourMoment.valueOf(),
           classes: {
+            active: activeValue === hourMoment.valueOf(),
             today: hourMoment.isSame(currentMoment, 'hour'),
           }
         };

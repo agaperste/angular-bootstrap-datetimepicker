@@ -28,10 +28,9 @@
       <div *ngFor="let cell of row.cells"
            role="gridcell"
            class="col date-button {{_model.viewName}} {{cell.value}}"
-           [class.active]="_isActiveCell(cell.value)"
            [ngClass]="cell.classes"
            [attr.aria-label]="cell.ariaLabel"
-           [attr.tabindex]="_isActiveCell(cell.value) ? 0 : -1"
+           [attr.tabindex]="cell.classes.active ? 0 : -1"
            (click)="_onDateClick(cell.value)"
       >{{cell.display}}</div>
     </div>

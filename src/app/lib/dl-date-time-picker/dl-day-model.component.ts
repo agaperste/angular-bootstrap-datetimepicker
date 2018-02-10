@@ -47,10 +47,11 @@ export class DlDayModelComponent implements DlModelProvider {
     const previousMonth = moment(startOfMonth).subtract(1, 'month');
     const nextMonth = moment(startOfMonth).add(1, 'month');
 
+    const activeValue = moment(milliseconds).startOf('day').valueOf();
     const result: DlDateTimePickerModel = {
       viewName: 'day',
       viewLabel: startOfMonth.format('MMM YYYY'),
-      activeDate: moment(milliseconds).startOf('day').valueOf(),
+      activeDate: activeValue,
       leftButton: {
         value: previousMonth.valueOf(),
         ariaLabel: `Go to ${previousMonth.format('MMM YYYY')}`,
@@ -84,6 +85,7 @@ export class DlDayModelComponent implements DlModelProvider {
           ariaLabel: dayMoment.format('ll'),
           value: dayMoment.valueOf(),
           classes: {
+            active: activeValue === dayMoment.valueOf(),
             past: dayMoment.isBefore(startOfMonth),
             future: dayMoment.isAfter(endOfMonth),
             today: dayMoment.isSame(currentMoment, 'day'),
