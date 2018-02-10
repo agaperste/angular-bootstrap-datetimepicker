@@ -32,6 +32,8 @@
 .left-button:hover,
 .right-button:focus,
 .right-button:hover,
+.up-button:focus,
+.up-button:hover,
 .view-label:focus {
   background: hsla(0, 0%, 0%, 0.04);
 }
