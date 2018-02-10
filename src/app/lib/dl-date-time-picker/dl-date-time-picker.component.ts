@@ -219,7 +219,11 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   set value(value: number) {
     if (this._value !== value) {
       this._value = value;
-      this._model = this._viewToFactory[this._model.viewName].getModel(hasValue(this._value) ? this._value : moment().valueOf());
+      this._model = this._viewToFactory[this._model.viewName]
+        .getModel(
+          hasValue(this._value) ? this._value : moment().valueOf(),
+          this.value
+        );
       this._changed.forEach(f => f(value));
       this.change.emit(new DlDateTimePickerChange(value));
     }
@@ -227,7 +231,10 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /** @internal */
   ngOnInit(): void {
-    this._model = this._viewToFactory[this._getStartView()].getModel(moment().valueOf());
+    this._model = this._viewToFactory[this._getStartView()]
+      .getModel(hasValue(this._value) ? this._value : moment().valueOf(),
+        this.value
+      );
   }
 
   /** @internal */
@@ -240,25 +247,25 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
       nextView = this.startView;
     }
 
-    this._model = this._viewToFactory[nextView].getModel(milliseconds);
+    this._model = this._viewToFactory[nextView].getModel(milliseconds, this.value);
 
     this._onTouch();
   }
 
   /** @internal */
   _onLeftClick() {
-    this._model = this._viewToFactory[this._model.viewName].getModel(this._model.leftButton.value);
+    this._model = this._viewToFactory[this._model.viewName].getModel(this._model.leftButton.value, this.value);
     this._onTouch();
   }
 
   /** @internal */
   _onUpClick() {
-    this._model = this._viewToFactory[this._previousView[this._model.viewName]].getModel(this._model.upButton.value);
+    this._model = this._viewToFactory[this._previousView[this._model.viewName]].getModel(this._model.upButton.value, this.value);
   }
 
   /** @internal */
   _onRightClick() {
-    this._model = this._viewToFactory[this._model.viewName].getModel(this._model.rightButton.value);
+    this._model = this._viewToFactory[this._model.viewName].getModel(this._model.rightButton.value, this.value);
     this._onTouch();
   }
 
@@ -288,28 +295,28 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
         event.preventDefault();
         return;
       case PAGE_UP:
-        this._model = currentViewFactory.pageUp(this._model.activeDate);
+        this._model = currentViewFactory.pageUp(this._model.activeDate, this.value);
         break;
       case PAGE_DOWN:
-        this._model = currentViewFactory.pageDown(this._model.activeDate);
+        this._model = currentViewFactory.pageDown(this._model.activeDate, this.value);
         break;
       case END:
-        this._model = currentViewFactory.goEnd(this._model.activeDate);
+        this._model = currentViewFactory.goEnd(this._model.activeDate, this.value);
         break;
       case HOME:
-        this._model = currentViewFactory.goHome(this._model.activeDate);
+        this._model = currentViewFactory.goHome(this._model.activeDate, this.value);
         break;
       case LEFT_ARROW:
-        this._model = currentViewFactory.goLeft(this._model.activeDate);
+        this._model = currentViewFactory.goLeft(this._model.activeDate, this.value);
         break;
       case RIGHT_ARROW:
-        this._model = currentViewFactory.goRight(this._model.activeDate);
+        this._model = currentViewFactory.goRight(this._model.activeDate, this.value);
         break;
       case UP_ARROW:
-        this._model = currentViewFactory.goUp(this._model.activeDate);
+        this._model = currentViewFactory.goUp(this._model.activeDate, this.value);
         break;
       case DOWN_ARROW:
-        this._model = currentViewFactory.goDown(this._model.activeDate);
+        this._model = currentViewFactory.goDown(this._model.activeDate, this.value);
         break;
       default:
         // Don't prevent default or focus active cell on keys that we don't explicitly handle.

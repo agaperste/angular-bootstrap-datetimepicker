@@ -50,10 +50,12 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param milliseconds
    *  the moment in time from which the year model will be created.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  the model representing the specified moment in time.
    */
-  getModel(milliseconds: number): DlDateTimePickerModel {
+  getModel(milliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
     const rowNumbers = [0, 1];
     const columnNumbers = [0, 1, 2, 3, 4];
 
@@ -63,6 +65,9 @@ export class DlYearModelComponent implements DlModelProvider {
     const futureYear = startDate.year() + 9;
     const pastYear = startDate.year();
     const activeValue = startYear.valueOf();
+    const selectedValue = selectedMilliseconds === null || selectedMilliseconds === undefined
+      ? selectedMilliseconds
+      : moment(selectedMilliseconds).startOf('year').valueOf();
 
     const result: DlDateTimePickerModel = {
       viewName: 'year',
@@ -96,7 +101,8 @@ export class DlYearModelComponent implements DlModelProvider {
           value: yearMoment.valueOf(),
           classes: {
             active: activeValue === yearMoment.valueOf(),
-            today: yearMoment.isSame(currentMoment, 'year'),
+            selected: selectedValue === yearMoment.valueOf(),
+            now: yearMoment.isSame(currentMoment, 'year'),
           }
         };
       });
@@ -116,11 +122,13 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `year` model `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `year` one row `down` from the specified moment in time.
    */
-  goDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(5, 'year').valueOf());
+  goDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(5, 'year').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -135,11 +143,13 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the previous `year` model `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `year` one row `up` from the specified moment in time.
    */
-  goUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(5, 'year').valueOf());
+  goUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(5, 'year').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -154,11 +164,13 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `year` model to the `left` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `year` one year to the `left` of the specified moment in time.
    */
-  goLeft(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(1, 'year').valueOf());
+  goLeft(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'year').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -173,11 +185,13 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `year` model to the `right` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `year` one year to the `right` of the specified moment in time.
    */
-  goRight(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(1, 'year').valueOf());
+  goRight(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(1, 'year').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -192,11 +206,13 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `year` model page `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `year` one decade `down` from the specified moment in time.
    */
-  pageDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(10, 'year').valueOf());
+  pageDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(10, 'year').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -211,11 +227,13 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `year` model page `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `year` one decade `up` from the specified moment in time.
    */
-  pageUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(10, 'year').valueOf());
+  pageUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(10, 'year').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -226,11 +244,19 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `last` active `year` will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  a model with the `last` cell in the view as the active `year`.
    */
-  goEnd(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(DlYearModelComponent.getStartOfDecade(fromMilliseconds).add(9, 'years').endOf('year').valueOf());
+  goEnd(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(
+      DlYearModelComponent.getStartOfDecade(fromMilliseconds)
+        .add(9, 'years')
+        .endOf('year')
+        .valueOf(),
+      selectedMilliseconds
+    );
   }
 
   /**
@@ -241,10 +267,17 @@ export class DlYearModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `first` active `year` will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  a model with the `first` cell in the view as the active `year`.
    */
-  goHome(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(DlYearModelComponent.getStartOfDecade(fromMilliseconds).startOf('year').valueOf());
+  goHome(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(
+      DlYearModelComponent.getStartOfDecade(fromMilliseconds)
+        .startOf('year')
+        .valueOf(),
+      selectedMilliseconds
+    );
   }
 }

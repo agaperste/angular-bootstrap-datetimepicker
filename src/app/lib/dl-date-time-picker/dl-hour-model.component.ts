@@ -32,10 +32,12 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param milliseconds
    *  the moment in time from which the minute model will be created.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  the model representing the specified moment in time.
    */
-  getModel(milliseconds: number): DlDateTimePickerModel {
+  getModel(milliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
     const startDate = moment(milliseconds).startOf('day');
 
     const rowNumbers = [0, 1, 2, 3, 4, 5];
@@ -44,6 +46,9 @@ export class DlHourModelComponent implements DlModelProvider {
     const previousDay = moment(startDate).subtract(1, 'day');
     const nextDay = moment(startDate).add(1, 'day');
     const activeValue = moment(milliseconds).startOf('hour').valueOf();
+    const selectedValue = selectedMilliseconds === null || selectedMilliseconds === undefined
+      ? selectedMilliseconds
+      : moment(selectedMilliseconds).startOf('hour').valueOf();
 
     const result: DlDateTimePickerModel = {
       viewName: 'hour',
@@ -83,7 +88,8 @@ export class DlHourModelComponent implements DlModelProvider {
           value: hourMoment.valueOf(),
           classes: {
             active: activeValue === hourMoment.valueOf(),
-            today: hourMoment.isSame(currentMoment, 'hour'),
+            selected: selectedValue === hourMoment.valueOf(),
+            now: hourMoment.isSame(currentMoment, 'hour'),
           }
         };
       });
@@ -100,11 +106,13 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `hour` model `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `hour` one row `down` from the specified moment in time.
    */
-  goDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(4, 'hour').valueOf());
+  goDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(4, 'hour').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -116,11 +124,13 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `hour` model `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `hour` one row `up` from the specified moment in time.
    */
-  goUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(4, 'hour').valueOf());
+  goUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(4, 'hour').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -132,11 +142,13 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `hour` model to the `left` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `hour` one cell to the `left` of the specified moment in time.
    */
-  goLeft(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(1, 'hour').valueOf());
+  goLeft(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'hour').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -148,11 +160,13 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `hour` model to the `right` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `hour` one cell to the `right` of the specified moment in time.
    */
-  goRight(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(1, 'hour').valueOf());
+  goRight(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(1, 'hour').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -164,11 +178,13 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `hour` model page `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `hour` one day `down` from the specified moment in time.
    */
-  pageDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(1, 'day').valueOf());
+  pageDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(1, 'day').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -180,11 +196,13 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `hour` model page `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `hour` one day `up` from the specified moment in time.
    */
-  pageUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(1, 'day').valueOf());
+  pageUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'day').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -195,17 +213,17 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which `11:00 pm` will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  a model with the `11:00 pm` cell in the view as the active `hour`.
    */
-  goEnd(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(
-      moment
-      (fromMilliseconds)
-        .endOf('day')
-        .startOf('hour')
-        .valueOf()
-    );
+  goEnd(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment
+    (fromMilliseconds)
+      .endOf('day')
+      .startOf('hour')
+      .valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -216,10 +234,12 @@ export class DlHourModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which `midnight` will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  a model with the `midnight` cell in the view as the active `hour`.
    */
-  goHome(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).startOf('day').valueOf());
+  goHome(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).startOf('day').valueOf(), selectedMilliseconds);
   }
 }

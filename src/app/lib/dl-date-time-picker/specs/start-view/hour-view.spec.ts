@@ -95,15 +95,51 @@ describe('DlDateTimePickerComponent startView=hour', () => {
       expect(hourElements.length).toBe(24);
     });
 
-    it('should contain 1 .today element for the current hour', () => {
-      const currentElements = fixture.debugElement.queryAll(By.css('.today'));
+    it('should contain 1 .now element for the current hour', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
       expect(currentElements.length).toBe(1);
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().startOf('hour').format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('hour').valueOf().toString());
     });
 
+    it('should NOT contain an .now element in the previous day', () => {
+      // click on the left button to move to the previous hour
+      debugElement.query(By.css('.left-button')).nativeElement.click();
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
+      expect(currentElements.length).toBe(0);
+    });
+
+    it('should NOT contain an .now element in the next day', () => {
+      // click on the left button to move to the previous hour
+      debugElement.query(By.css('.right-button')).nativeElement.click();
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
+      expect(currentElements.length).toBe(0);
+    });
+
     it('should contain 1 .active element for the current hour', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
+      expect(currentElements.length).toBe(1);
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().startOf('hour').format('LT'));
+      expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('hour').valueOf().toString());
+    });
+
+    it('should contain 1 .selected element for the current value', () => {
+      component.picker.value = moment().startOf('hour').valueOf();
+      fixture.detectChanges();
+
+      // Bug: The value change is not detected until there is some user interaction
+      // **ONlY** when there is no ngModel binding on the component.
+      // I think it is related to https://github.com/angular/angular/issues/10816
+      const activeElement = debugElement.query(By.css('.active')).nativeElement;
+      activeElement.focus();
+      dispatchKeyboardEvent(activeElement, 'keydown', RIGHT_ARROW);
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.selected'));
       expect(currentElements.length).toBe(1);
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().startOf('hour').format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('hour').valueOf().toString());

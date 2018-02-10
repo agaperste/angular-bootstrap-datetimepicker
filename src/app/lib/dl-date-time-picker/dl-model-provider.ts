@@ -19,10 +19,12 @@ export interface DlModelProvider {
    * Returns the model for the specified moment in time.
    * @param milliseconds
    *  the moment in time the model should represent.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  the model representing the specified moment in time.
    */
-  getModel(milliseconds: number): DlDateTimePickerModel;
+  getModel(milliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell one cell down from the specified moment in time.
@@ -37,10 +39,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next model `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  the model representing the next model `down` from the specified moment in time.
    */
-  goDown(fromMilliseconds: number): DlDateTimePickerModel;
+  goDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell to the `last` cell from the specified moment in time.
@@ -55,10 +59,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `last` active cell will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  a model with the `last` cell in the view as the active cell.
    */
-  goEnd(fromMilliseconds: number): DlDateTimePickerModel;
+  goEnd(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell to the `first` cell from the specified moment in time.
@@ -73,10 +79,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `first` active cell will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  a model with the `first` cell in the view as the active cell.
    */
-  goHome(fromMilliseconds: number): DlDateTimePickerModel;
+  goHome(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell one cell to the `left` from the specified moment in time.
@@ -91,10 +99,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next model `left` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  the model representing the next model `left` from the specified moment in time.
    */
-  goLeft(fromMilliseconds: number): DlDateTimePickerModel;
+  goLeft(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell one cell to the `right` from the specified moment in time.
@@ -109,10 +119,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next model `right` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  the model representing the next model `right` from the specified moment in time.
    */
-  goRight(fromMilliseconds: number): DlDateTimePickerModel;
+  goRight(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell one cell `up` from the specified moment in time.
@@ -127,10 +139,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next model `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  the model representing the next model `up` from the specified moment in time.
    */
-  goUp(fromMilliseconds: number): DlDateTimePickerModel;
+  goUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell one `page-down` from the specified moment in time.
@@ -145,10 +159,12 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next model `page-down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  the model representing the next model `page-down` from the specified moment in time.
    */
-  pageDown(fromMilliseconds: number): DlDateTimePickerModel;
+  pageDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 
   /**
    * Move the `active` cell one `page-up` from the specified moment in time.
@@ -163,8 +179,10 @@ export interface DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next model `page-up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker
    * @returns
    *  the model representing the next model `page-up` from the specified moment in time.
    */
-  pageUp(fromMilliseconds: number): DlDateTimePickerModel;
+  pageUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel;
 }

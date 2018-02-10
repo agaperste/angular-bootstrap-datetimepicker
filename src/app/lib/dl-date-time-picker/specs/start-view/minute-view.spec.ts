@@ -94,8 +94,8 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       expect(minuteElements.length).toBe(12);
     });
 
-    it('should contain 1 .today element for the current  minute', () => {
-      const currentElements = fixture.debugElement.queryAll(By.css('.today'));
+    it('should contain 1 .now element for the current  minute', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
       expect(currentElements.length).toBe(1);
 
       const now = moment();
@@ -111,6 +111,24 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());
     });
 
+    it('should NOT contain an .now element in the previous hour', () => {
+      // click on the left button to move to the previous hour
+      debugElement.query(By.css('.left-button')).nativeElement.click();
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
+      expect(currentElements.length).toBe(0);
+    });
+
+    it('should NOT contain an .now element in the next hour', () => {
+      // click on the left button to move to the previous hour
+      debugElement.query(By.css('.right-button')).nativeElement.click();
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
+      expect(currentElements.length).toBe(0);
+    });
+
     it('should contain 1 .active element for the current minute', () => {
       const currentElements = fixture.debugElement.queryAll(By.css('.active'));
       expect(currentElements.length).toBe(1);
@@ -123,6 +141,26 @@ describe('DlDateTimePickerComponent startView=minute', () => {
       const minuteSteps = new Array(60 / step).fill(0).map((value, index) => index * step);
       const minuteValues = minuteSteps.map((minutesToAdd) => moment(startDate).add(minutesToAdd, 'minutes').valueOf());
       const currentMoment = moment(minuteValues.filter((value) => value < now.valueOf()).pop());
+
+      expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentMoment.format('LT'));
+      expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());
+    });
+
+    it('should contain 1 .selected element for the current minute', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.active'));
+      expect(currentElements.length).toBe(1);
+
+      const now = moment();
+      const startDate = moment(now).startOf('hour');
+
+      const step = 5;
+
+      const minuteSteps = new Array(60 / step).fill(0).map((value, index) => index * step);
+      const minuteValues = minuteSteps.map((minutesToAdd) => moment(startDate).add(minutesToAdd, 'minutes').valueOf());
+      const currentMoment = moment(minuteValues.filter((value) => value < now.valueOf()).pop());
+
+      component.picker.value = currentMoment.valueOf();
+      fixture.detectChanges();
 
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(currentMoment.format('LT'));
       expect(currentElements[0].nativeElement.classList).toContain(currentMoment.valueOf().toString());

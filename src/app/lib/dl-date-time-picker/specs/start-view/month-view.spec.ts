@@ -93,11 +93,29 @@ describe('DlDateTimePickerComponent startView=month', () => {
       expect(monthElements.length).toBe(12);
     });
 
-    it('should contain 1 .today element for the current month', () => {
-      const currentElements = fixture.debugElement.queryAll(By.css('.today'));
+    it('should contain 1 .now element for the current month', () => {
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
       expect(currentElements.length).toBe(1);
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().format('MMM'));
       expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('month').valueOf().toString());
+    });
+
+    it('should NOT contain an .now element in the previous year', () => {
+      // click on the left button to move to the previous hour
+      debugElement.query(By.css('.left-button')).nativeElement.click();
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
+      expect(currentElements.length).toBe(0);
+    });
+
+    it('should NOT contain an .now element in the next year', () => {
+      // click on the left button to move to the previous hour
+      debugElement.query(By.css('.right-button')).nativeElement.click();
+      fixture.detectChanges();
+
+      const currentElements = fixture.debugElement.queryAll(By.css('.now'));
+      expect(currentElements.length).toBe(0);
     });
 
     it('should contain 1 .active element for the current month', () => {
@@ -106,6 +124,25 @@ describe('DlDateTimePickerComponent startView=month', () => {
       expect(currentElements[0].nativeElement.textContent.trim()).toBe(moment().format('MMM'));
       expect(currentElements[0].nativeElement.classList).toContain(moment().startOf('month').valueOf().toString());
     });
+
+    it('should contain 1 .selected element for the current month', () => {
+      component.picker.value = moment().startOf('month').valueOf();
+      fixture.detectChanges();
+
+      // Bug: The value change is not detected until there is some user interaction
+      // **ONlY** when there is no ngModel binding on the component.
+      // I think it is related to https://github.com/angular/angular/issues/10816
+      const activeElement = debugElement.query(By.css('.active')).nativeElement;
+      activeElement.focus();
+      dispatchKeyboardEvent(activeElement, 'keydown', RIGHT_ARROW);
+      fixture.detectChanges();
+
+      const selectedElements = fixture.debugElement.queryAll(By.css('.selected'));
+      expect(selectedElements.length).toBe(1);
+      expect(selectedElements[0].nativeElement.textContent.trim()).toBe(moment().format('MMM'));
+      expect(selectedElements[0].nativeElement.classList).toContain(moment().startOf('month').valueOf().toString());
+    });
+
   });
 
   describe('ngModel=2017-12-22', () => {

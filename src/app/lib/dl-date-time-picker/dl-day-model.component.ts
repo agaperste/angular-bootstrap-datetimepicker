@@ -32,10 +32,12 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param milliseconds
    *  the moment in time from which the minute model will be created.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  the model representing the specified moment in time.
    */
-  getModel(milliseconds: number): DlDateTimePickerModel {
+  getModel(milliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
 
     const startOfMonth = moment(milliseconds).startOf('month');
     const endOfMonth = moment(milliseconds).endOf('month');
@@ -46,8 +48,11 @@ export class DlDayModelComponent implements DlModelProvider {
 
     const previousMonth = moment(startOfMonth).subtract(1, 'month');
     const nextMonth = moment(startOfMonth).add(1, 'month');
-
     const activeValue = moment(milliseconds).startOf('day').valueOf();
+    const selectedValue = selectedMilliseconds === null || selectedMilliseconds === undefined
+      ? selectedMilliseconds
+      : moment(selectedMilliseconds).startOf('day').valueOf();
+
     const result: DlDateTimePickerModel = {
       viewName: 'day',
       viewLabel: startOfMonth.format('MMM YYYY'),
@@ -86,9 +91,10 @@ export class DlDayModelComponent implements DlModelProvider {
           value: dayMoment.valueOf(),
           classes: {
             active: activeValue === dayMoment.valueOf(),
-            past: dayMoment.isBefore(startOfMonth),
             future: dayMoment.isAfter(endOfMonth),
-            today: dayMoment.isSame(currentMoment, 'day'),
+            past: dayMoment.isBefore(startOfMonth),
+            selected: selectedValue === dayMoment.valueOf(),
+            now: dayMoment.isSame(currentMoment, 'day'),
           }
         };
       });
@@ -105,11 +111,13 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `day` model `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `day` one row `down` from the specified moment in time.
    */
-  goDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(7, 'days').valueOf());
+  goDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(7, 'days').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -121,11 +129,13 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `day` model `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `day` one row `up` from the specified moment in time.
    */
-  goUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(7, 'days').valueOf());
+  goUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(7, 'days').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -137,11 +147,13 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `day` model to the `left` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `day` one cell to the `left` of the specified moment in time.
    */
-  goLeft(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(1, 'day').valueOf());
+  goLeft(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'day').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -153,11 +165,13 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the `day` model to the `right` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `day` one cell to the `right` of the specified moment in time.
    */
-  goRight(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(1, 'day').valueOf());
+  goRight(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(1, 'day').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -169,11 +183,13 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `day` model page `down` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `day` one month `down` from the specified moment in time.
    */
-  pageDown(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).add(1, 'month').valueOf());
+  pageDown(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).add(1, 'month').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -185,11 +201,13 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the next `day` model page `up` will be constructed.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  model containing an `active` `day` one month `up` from the specified moment in time.
    */
-  pageUp(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).subtract(1, 'month').valueOf());
+  pageUp(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).subtract(1, 'month').valueOf(), selectedMilliseconds);
   }
 
 
@@ -201,12 +219,14 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the last day of the month will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  a model with the last cell in the view as the active `day`.
    */
-  goEnd(fromMilliseconds: number): DlDateTimePickerModel {
+  goEnd(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
     return this.getModel(moment(fromMilliseconds)
-      .endOf('month').startOf('day').valueOf());
+      .endOf('month').startOf('day').valueOf(), selectedMilliseconds);
   }
 
   /**
@@ -217,10 +237,12 @@ export class DlDayModelComponent implements DlModelProvider {
    *
    * @param fromMilliseconds
    *  the moment in time from which the first day of the month will be calculated.
+   * @param selectedMilliseconds
+   *  the current value of the date/time picker.
    * @returns
    *  a model with the first cell in the view as the active `day`.
    */
-  goHome(fromMilliseconds: number): DlDateTimePickerModel {
-    return this.getModel(moment(fromMilliseconds).startOf('month').valueOf());
+  goHome(fromMilliseconds: number, selectedMilliseconds: number): DlDateTimePickerModel {
+    return this.getModel(moment(fromMilliseconds).startOf('month').valueOf(), selectedMilliseconds);
   }
 }
