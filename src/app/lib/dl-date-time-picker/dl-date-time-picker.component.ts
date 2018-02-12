@@ -63,22 +63,24 @@ const VIEWS = [
 export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /**
+   * Specifies the classes used to display the left icon.
+   *
+   * This component uses OPENICONIC https://useiconic.com/open
+   * by default but any icon library may be used.
+   */
+  @Input()
+  leftIconClass: string | string[] | Set<string> | {} = [
+    'oi',
+    'oi-chevron-left'
+  ];
+
+  /**
    * The highest view that the date/time picker can show.
    * Setting this to a view less than year could make it more
    * difficult for the end-user to navigate to certain dates.
    */
   @Input()
   maxView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'year';
-
-  /**
-   * The initial view that the date/time picker will show.
-   * The picker will also return to this view after a date/time
-   * is selected.
-   *
-   * NOTE: This must be set lower than or equal to `maxView'
-   */
-  @Input()
-  startView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'day';
 
   /**
    * The view that will be used for date/time selection.
@@ -95,29 +97,6 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   @Input()
   minView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'minute';
 
-  /**
-   * Specifies the classes used to display the left icon.
-   *
-   * This component uses OPENICONIC https://useiconic.com/open
-   * by default but any icon library may be used.
-   */
-  @Input()
-  leftIconClass: string | string[] | Set<string> | {} = [
-    'oi',
-    'oi-chevron-left'
-  ];
-
-  /**
-   * Specifies the classes used to display the up icon.
-   *
-   * This component uses OPENICONIC https://useiconic.com/open
-   * by default but any icon library may be used.
-   */
-  @Input()
-  upIconClass = [
-    'oi',
-    'oi-chevron-top'
-  ];
 
   /**
    * Specifies the classes used to display the right icon.
@@ -129,6 +108,28 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   rightIconClass = [
     'oi',
     'oi-chevron-right'
+  ];
+
+  /**
+   * The initial view that the date/time picker will show.
+   * The picker will also return to this view after a date/time
+   * is selected.
+   *
+   * NOTE: This must be set lower than or equal to `maxView'
+   */
+  @Input()
+  startView: 'year' | 'month' | 'day' | 'hour' | 'minute' = 'day';
+
+  /**
+   * Specifies the classes used to display the up icon.
+   *
+   * This component uses OPENICONIC https://useiconic.com/open
+   * by default but any icon library may be used.
+   */
+  @Input()
+  upIconClass = [
+    'oi',
+    'oi-chevron-top'
   ];
 
   /**
@@ -204,6 +205,16 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /** @internal */
   private _value: number;
+  private _startDate: number;
+
+  /**
+   *  Start at the view containing startDate when no value is selected.
+   */
+  @Input()
+  set startDate(newStartDate: number) {
+    this._startDate = newStartDate;
+  }
+
 
   /**
    * Returns value of the date/time picker or undefined/null if no value is set.
@@ -219,11 +230,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   set value(value: number) {
     if (this._value !== value) {
       this._value = value;
-      this._model = this._viewToFactory[this._model.viewName]
-        .getModel(
-          hasValue(this._value) ? this._value : moment().valueOf(),
-          this.value
-        );
+      this._model = this._viewToFactory[this._model.viewName].getModel(this.getStartDate(), this.value);
       this._changed.forEach(f => f(value));
       this.change.emit(new DlDateTimePickerChange(value));
     }
@@ -231,10 +238,18 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
 
   /** @internal */
   ngOnInit(): void {
-    this._model = this._viewToFactory[this._getStartView()]
-      .getModel(hasValue(this._value) ? this._value : moment().valueOf(),
-        this.value
-      );
+    this._model = this._viewToFactory[this.getStartView()].getModel(this.getStartDate(), this.value);
+  }
+
+  /** @internal */
+  private getStartDate() {
+    if (hasValue(this._value)) {
+      return this._value;
+    }
+    if (hasValue(this._startDate)) {
+      return this._startDate;
+    }
+    return moment().valueOf();
   }
 
   /** @internal */
@@ -329,7 +344,7 @@ export class DlDateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   /** @internal */
-  private _getStartView(): string {
+  private getStartView(): string {
     const startIndex = Math.max(VIEWS.indexOf(this.minView || 'minute'), VIEWS.indexOf(this.startView || 'day'));
     return VIEWS[startIndex];
   }

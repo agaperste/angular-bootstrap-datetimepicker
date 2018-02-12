@@ -103,8 +103,8 @@ describe('DlDateTimePickerComponent minView', () => {
     it('should start with year-view', () => {
       // no other options are specified and year-view is a higher level view than
       // day-view (the default start view)
-      const monthView = fixture.debugElement.query(By.css('.year-view'));
-      expect(monthView).toBeTruthy();
+      const yearView = fixture.debugElement.query(By.css('.year-view'));
+      expect(yearView).toBeTruthy();
     });
 
     it('should store the value in ngModel when clicking a .year', () => {
@@ -113,8 +113,8 @@ describe('DlDateTimePickerComponent minView', () => {
 
       expect(component.picker.value).toBeUndefined();
 
-      const monthElements = fixture.debugElement.queryAll(By.css('.year'));
-      monthElements[2].nativeElement.click();
+      const yearElements = fixture.debugElement.queryAll(By.css('.year'));
+      yearElements[2].nativeElement.click();
       fixture.detectChanges();
 
       expect(component.picker.value).not.toBeUndefined();
@@ -222,8 +222,8 @@ describe('DlDateTimePickerComponent minView', () => {
 
     it('should start with day-view', () => {
       // day-view (the default start view) is a higher level view than hour-view
-      const monthView = fixture.debugElement.query(By.css('.day-view'));
-      expect(monthView).toBeTruthy();
+      const dayView = fixture.debugElement.query(By.css('.day-view'));
+      expect(dayView).toBeTruthy();
     });
 
     it('should store the value in ngModel when clicking a .hour', () => {
@@ -232,8 +232,8 @@ describe('DlDateTimePickerComponent minView', () => {
 
       expect(component.picker.value).toBeUndefined();
 
-      const monthElements = fixture.debugElement.queryAll(By.css('.day'));
-      monthElements[19].nativeElement.click();
+      const dayElements = fixture.debugElement.queryAll(By.css('.day'));
+      dayElements[19].nativeElement.click();
       fixture.detectChanges();
 
       expect(component.picker.value).toBeUndefined();
@@ -279,8 +279,8 @@ describe('DlDateTimePickerComponent minView', () => {
 
       expect(component.picker.value).toBeUndefined();
 
-      const monthElements = fixture.debugElement.queryAll(By.css('.day'));
-      monthElements[19].nativeElement.click();
+      const dayElements = fixture.debugElement.queryAll(By.css('.day'));
+      dayElements[19].nativeElement.click();
       fixture.detectChanges();
 
       expect(component.picker.value).toBeUndefined();
@@ -324,8 +324,8 @@ describe('DlDateTimePickerComponent minView', () => {
 
     it('should start with day-view', () => {
       // day-view (the default start view) is a higher level view than hour-view
-      const monthView = fixture.debugElement.query(By.css('.day-view'));
-      expect(monthView).toBeTruthy();
+      const dayView = fixture.debugElement.query(By.css('.day-view'));
+      expect(dayView).toBeTruthy();
     });
 
     it('should store the value in ngModel when clicking a .minute', () => {
@@ -334,8 +334,8 @@ describe('DlDateTimePickerComponent minView', () => {
 
       expect(component.picker.value).toBeUndefined();
 
-      const monthElements = fixture.debugElement.queryAll(By.css('.day'));
-      monthElements[19].nativeElement.click();
+      const dayElements = fixture.debugElement.queryAll(By.css('.day'));
+      dayElements[19].nativeElement.click();
       fixture.detectChanges();
 
       expect(component.picker.value).toBeUndefined();
